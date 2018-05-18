@@ -11,9 +11,10 @@ import javax.persistence.Table;
 import lombok.Data;
 
 @Data
-@Table(name="user")
+@Table(name="operator")
 @Entity
-public class User implements Serializable  {
+public class Operator implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
 
 	@Id  
@@ -21,8 +22,8 @@ public class User implements Serializable  {
 	@GeneratedValue
     private Long id;  
   
-	@Column(name="user_name",columnDefinition="varchar(50) NOT NULL DEFAULT '' COMMENT '用户姓名'")
-	private String userName; 
+	@Column(name="operator_name",columnDefinition="varchar(50) NOT NULL DEFAULT '' COMMENT '操作用户姓名'")
+	private String operatorName; 
 	
 	@Column(name="age",columnDefinition="int(3) NOT NULL DEFAULT '30' COMMENT '年龄'")
 	private int age;  

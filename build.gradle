@@ -1,6 +1,7 @@
 buildscript {
     ext {
         springBootVersion = '1.5.8.RELEASE'
+        mapstructVersion = "1.2.0.CR1"
     }
     repositories {
         mavenCentral()
@@ -8,6 +9,11 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
     }
+}
+
+plugins {
+    id 'java'
+    id 'net.ltgt.apt' version '0.9'
 }
 
 apply plugin: 'java'
@@ -36,5 +42,9 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	runtime('mysql:mysql-connector-java') 
 	compile('org.springframework.boot:spring-boot-starter-tomcat') 
+	compile("org.mapstruct:mapstruct-jdk8:${mapstructVersion}")
+    apt("org.mapstruct:mapstruct-processor:${mapstructVersion}")
+    testCompile('org.testng:testng:6.10')
+    testCompile('org.easytesting:fest-assert:1.4')
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
