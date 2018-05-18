@@ -37,6 +37,7 @@ public class User implements Serializable  {
 	private String updatedBy;  
 	
 	@Column(name="updated_time",columnDefinition="timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'")
-	private String updatedTime;  
+	private String updatedTime;
+
 	
 }

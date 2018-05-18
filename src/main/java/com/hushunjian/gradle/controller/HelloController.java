@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hushunjian.gradle.compile.SourceTargetMapper;
+import com.hushunjian.gradle.copier.SourceTargetMapper;
 import com.hushunjian.gradle.entity.Operator;
 import com.hushunjian.gradle.entity.User;
 import com.hushunjian.gradle.service.UserService;

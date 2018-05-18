@@ -1,6 +1,6 @@
 package org.mapstruct.example;
 
-import com.hushunjian.gradle.compile.SourceTargetMapper;
+import com.hushunjian.gradle.copier.SourceTargetMapper;
 import com.hushunjian.gradle.entity.Operator;
 import com.hushunjian.gradle.entity.User;
 
