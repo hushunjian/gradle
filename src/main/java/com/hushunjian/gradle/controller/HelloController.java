@@ -15,10 +15,11 @@ import com.hushunjian.gradle.copier.SourceTargetMapper;
 import com.hushunjian.gradle.entity.Operator;
 import com.hushunjian.gradle.entity.User;
 import com.hushunjian.gradle.service.UserService;
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiImplicitParam;
-import com.wordnik.swagger.annotations.ApiImplicitParams;
-import com.wordnik.swagger.annotations.ApiOperation;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 
 //页面访问路径http://localhost:8080/swagger-ui.html
 @RestController
