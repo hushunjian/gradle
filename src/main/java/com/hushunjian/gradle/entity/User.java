@@ -6,13 +6,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Table;
+
+import org.hibernate.annotations.Table;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-@Table(name="user")
+@Table(appliesTo = "user",comment="用户表A")
 @Entity
 public class User implements Serializable  {
 	private static final long serialVersionUID = 1L;
@@ -47,5 +48,7 @@ public class User implements Serializable  {
 	@Column(name="updated_time",columnDefinition="timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'")
 	private String updatedTime;
 
-	
+	@ApiModelProperty(value="用户状态",required=true)
+	@Column(name="status",columnDefinition="int(2) NOT NULL DEFAULT 1 COMMENT '用户状态,0:禁用;1:正常'")
+	private int status;
 }

@@ -13,4 +13,6 @@ public interface SourceTargetMapper {
     
     @Mapping(source="userName",target="operatorName")
     Operator asOperator(User user);
+    
+    User asUser(User user);
 }
