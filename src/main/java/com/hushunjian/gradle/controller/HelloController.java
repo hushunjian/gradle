@@ -75,6 +75,17 @@ public class HelloController {
         return userService.getUserById(id);
     }
 	
+	@ApiOperation(value = "删除哦用户", notes = "根据用户id删除用户",produces = MediaType.ALL_VALUE)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id",value = "用户id",required =true,paramType = "query",dataType="Long")
+    })
+	@RequestMapping(value="/deleteUserById",method=RequestMethod.GET)
+	@ResponseBody
+    public void deleteUserById(@RequestParam(value="id",required=true) Long id){
+        System.out.println("deleteUserById:"+id);
+        userService.deleteUserById(id);
+    }
+	
 	@ApiOperation(value = "获取用户信息", notes = "获取所有用户信息",produces = MediaType.ALL_VALUE)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageIndex",value = "开始页",required =true,paramType = "query",dataType="int"),

@@ -59,6 +59,10 @@ public class UserService {
 		Example<User> example = Example.of(user, matcher); 
 		return userRepo.findAll(example, pageable);
 	}
+
+	public void deleteUserById(Long id) {
+		userRepo.delete(id);
+	}
 	
 
 }
