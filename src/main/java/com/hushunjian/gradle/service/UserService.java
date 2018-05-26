@@ -1,5 +1,13 @@
 package com.hushunjian.gradle.service;
 
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
+import org.hibernate.SQLQuery;
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -11,13 +19,15 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.hushunjian.gradle.copier.SourceTargetMapper;
+import com.hushunjian.gradle.dto.UserBasicInfoDto;
 import com.hushunjian.gradle.entity.Operator;
 import com.hushunjian.gradle.entity.User;
 import com.hushunjian.gradle.repo.OperatorRepo;
 import com.hushunjian.gradle.repo.UserRepo;
 import com.hushunjian.gradle.searchConditionEntiy.GetAllUserByConditionEntity;
 
-@Service	
+@Service
+@SuppressWarnings("all")
 public class UserService {
 	
 	@Autowired
@@ -25,7 +35,10 @@ public class UserService {
 	
 	@Autowired
 	private OperatorRepo operatorRepo;
-
+	
+	@PersistenceContext
+    EntityManager entityManager;
+	
 	public void addUser(User user, Operator operator) {
 		userRepo.save(user);
 		operatorRepo.save(operator);
@@ -38,7 +51,7 @@ public class UserService {
 		return userOriginal;
 	}
 
-	public Object getUserById(Long id) {
+	public User getUserById(Long id) {
 		return userRepo.findOne(id);
 	}
 
@@ -63,6 +76,20 @@ public class UserService {
 	public void deleteUserById(Long id) {
 		userRepo.delete(id);
 	}
-	
 
+	public List<User> getAllUserByUserName(String userName) {
+		return userRepo.findByUserName(userName);
+	}
+
+	public List<User> getAllUserByUserNameLike(String userName) {
+		return userRepo.findByUserNameLike('%'+userName+'%');
+	}
+
+	public List<UserBasicInfoDto> getAllUserBasicInfo(int pageIndex, int pageSize) {
+		String sql = "SELECT t1.user_name AS userName,t1.age AS userAge,t1.status AS userStatus,t2.operator_name AS operatorName,t2.age AS operatorAge,t2.status operatorStatus FROM user t1,operator t2 WHERE t1.created_by = t2.operator_name LIMIT "+(pageIndex-1)*pageSize+","+pageSize;
+		Query query = entityManager.createNativeQuery(sql);
+		query.unwrap(SQLQuery.class).setResultTransformer(Transformers.aliasToBean(UserBasicInfoDto.class));
+		List<UserBasicInfoDto> userBasicInfoDtos = query.getResultList();       
+		return userBasicInfoDtos;
+	}
 }

@@ -1,6 +1,7 @@
 package com.hushunjian.gradle.controller;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hushunjian.gradle.copier.SourceTargetMapper;
+import com.hushunjian.gradle.dto.UserBasicInfoDto;
 import com.hushunjian.gradle.entity.Operator;
 import com.hushunjian.gradle.entity.User;
 import com.hushunjian.gradle.searchConditionEntiy.GetAllUserByConditionEntity;
@@ -70,12 +72,12 @@ public class HelloController {
     })
 	@RequestMapping(value="/getUserById",method=RequestMethod.GET)
 	@ResponseBody
-    public Object getUserById(@RequestParam(value="id",required=true) Long id){
+    public User getUserById(@RequestParam(value="id",required=true) Long id){
         System.out.println("getUserById:"+id);
         return userService.getUserById(id);
     }
 	
-	@ApiOperation(value = "删除哦用户", notes = "根据用户id删除用户",produces = MediaType.ALL_VALUE)
+	@ApiOperation(value = "删除用户", notes = "根据用户id删除用户",produces = MediaType.ALL_VALUE)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id",value = "用户id",required =true,paramType = "query",dataType="Long")
     })
@@ -107,6 +109,41 @@ public class HelloController {
         System.out.println("getAllUserByCondition:开始页:"+getAllUserByConditionEntity.getPageIndex()+";页大小:"+getAllUserByConditionEntity.getPageSize());
         return userService.getAllUserByCondition(getAllUserByConditionEntity);
     }
+	
+	@ApiOperation(value = "获取用户信息", notes = "根据用户姓名获取用户信息",produces = MediaType.ALL_VALUE)
+	@RequestMapping(value="/getAllUserByUserName",method=RequestMethod.GET)
+	@ApiImplicitParams({
+        @ApiImplicitParam(name = "userName",value = "用户姓名",required =true,paramType = "query",dataType="String")
+	})
+	@ResponseBody
+    public List<User> getAllUserByUserName(@RequestParam(value="userName",required=true) String userName){
+        System.out.println("getAllUserByUserName:userName:"+userName);
+        return userService.getAllUserByUserName(userName);
+    }
+	
+	@ApiOperation(value = "获取用户信息", notes = "根据用户姓名模糊查询获取用户信息",produces = MediaType.ALL_VALUE)
+	@RequestMapping(value="/getAllUserByUserNameLike",method=RequestMethod.GET)
+	@ApiImplicitParams({
+        @ApiImplicitParam(name = "userName",value = "用户姓名",required =true,paramType = "query",dataType="String")
+	})
+	@ResponseBody
+    public List<User> getAllUserByUserNameLike(@RequestParam(value="userName",required=true) String userName){
+        System.out.println("getAllUserByUserNameLike:"+userName);
+        return userService.getAllUserByUserNameLike(userName);
+    }
+	
+	@ApiOperation(value = "获取用户信息", notes = "获取用户信息以及创建人信息",produces = MediaType.ALL_VALUE)
+	@RequestMapping(value="/getAllUserBasicInfo",method=RequestMethod.GET)
+	@ApiImplicitParams({
+         @ApiImplicitParam(name = "pageIndex",value = "开始页",required =true,paramType = "query",dataType="int"),
+         @ApiImplicitParam(name = "pageSize",value = "页大小",required =true,paramType = "query",dataType="int")
+	 })
+    public List<UserBasicInfoDto> getAllUserBasicInfo(@RequestParam(value="pageIndex",required=true) int pageIndex,
+		       							  			  @RequestParam(value="pageSize",required=true) int pageSize){
+		System.out.println("getAllUserBasicInfo:开始页:"+pageIndex+";页大小:"+pageSize);
+        return userService.getAllUserBasicInfo(pageIndex,pageSize);
+    }
+	
 	
 	@ApiOperation(value = "修改用户信息", notes = "修改用户信息",produces = MediaType.ALL_VALUE)
 	@RequestMapping(value="/updateUser",method=RequestMethod.POST)

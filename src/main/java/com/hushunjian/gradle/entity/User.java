@@ -18,7 +18,7 @@ import lombok.Data;
 public class User implements Serializable  {
 	private static final long serialVersionUID = 1L;
 	
-	@ApiModelProperty(value="主键id",required=false)
+	@ApiModelProperty(value="主键id(新增时非必填,修改时必填)",required=false)
 	@Id  
 	@Column(name = "id",columnDefinition="bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键自增id'")
 	@GeneratedValue
