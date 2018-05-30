@@ -92,4 +92,8 @@ public class UserService {
 		List<UserBasicInfoDto> userBasicInfoDtos = query.getResultList();       
 		return userBasicInfoDtos;
 	}
+
+	public List<UserBasicInfoDto> getAllUserBasicInfoJPA(int pageIndex, int pageSize) {
+		return userRepo.getAllUserBasicInfoJPA();
+	}
 }

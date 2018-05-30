@@ -152,5 +152,18 @@ public class HelloController {
 		return userService.updateUser(user);
 	}
 	
+	@ApiOperation(value = "获取用户信息", notes = "获取用户信息以及创建人信息",produces = MediaType.ALL_VALUE)
+	@RequestMapping(value="/getAllUserBasicInfoJPA",method=RequestMethod.GET)
+	@ApiImplicitParams({
+         @ApiImplicitParam(name = "pageIndex",value = "开始页",required =true,paramType = "query",dataType="int"),
+         @ApiImplicitParam(name = "pageSize",value = "页大小",required =true,paramType = "query",dataType="int")
+	 })
+    public List<UserBasicInfoDto> getAllUserBasicInfoJPA(@RequestParam(value="pageIndex",required=true) int pageIndex,
+		       							  			  	 @RequestParam(value="pageSize",required=true) int pageSize){
+		System.out.println("getAllUserBasicInfoJPA:开始页:"+pageIndex+";页大小:"+pageSize);
+        return userService.getAllUserBasicInfoJPA(pageIndex,pageSize);
+    }
+	
+	
 	
 }
