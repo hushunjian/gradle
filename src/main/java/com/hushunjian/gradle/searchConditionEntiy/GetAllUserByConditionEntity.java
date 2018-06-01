@@ -10,4 +10,6 @@ public class GetAllUserByConditionEntity {
 	private int pageIndex;
 	
 	private int pageSize;
+	
+	private String createdBy;
 }

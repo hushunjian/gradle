@@ -11,7 +11,9 @@ import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers;
 import org.springframework.data.domain.ExampleMatcher.StringMatcher;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -58,17 +60,19 @@ public class UserService {
 	public Object getAllUserByPage(int pageIndex, int pageSize) {
 		//分页,排序
 		Sort sort = new Sort(Direction.DESC, "id");
-		Pageable pageable=new PageRequest(pageIndex,pageSize,sort);
+		//页码同0开始,第一页的页码为0
+		Pageable pageable=new PageRequest(pageIndex-1,pageSize,sort);
 		return userRepo.findAll(pageable);
 	}
 
 	public Object getAllUserByCondition(GetAllUserByConditionEntity getAllUserByConditionEntity) {
 		//分页,排序
 		Sort sort = new Sort(Direction.DESC, "id");
-		Pageable pageable=new PageRequest(getAllUserByConditionEntity.getPageIndex(),getAllUserByConditionEntity.getPageSize(),sort);
+		Pageable pageable=new PageRequest(getAllUserByConditionEntity.getPageIndex()-1,getAllUserByConditionEntity.getPageSize(),sort);
 		User user = new User();
 		user.setUserName(getAllUserByConditionEntity.getName());
-		ExampleMatcher matcher = ExampleMatcher.matching().withStringMatcher(StringMatcher.CONTAINING).withIgnoreCase(true).withIgnorePaths("age","status");
+		user.setCreatedBy(getAllUserByConditionEntity.getCreatedBy());
+		ExampleMatcher matcher = ExampleMatcher.matching().withStringMatcher(StringMatcher.CONTAINING).withIgnoreCase(true).withMatcher("createdBy", GenericPropertyMatchers.exact()).withIgnorePaths("age","status");
 		Example<User> example = Example.of(user, matcher); 
 		return userRepo.findAll(example, pageable);
 	}
