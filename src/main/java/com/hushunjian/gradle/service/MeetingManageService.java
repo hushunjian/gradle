@@ -98,4 +98,41 @@ public class MeetingManageService {
 		return meetingDtos;
 	}
 	
+	
+	
+	
+	
+	public List<MeetingDto> queryMeetByCriteria(QueryAllMeetingRequest queryAllMeetingRequest){
+		
+		
+		
+		
+		return null;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

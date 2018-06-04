@@ -100,4 +100,8 @@ public class UserService {
 	public List<UserBasicInfoDto> getAllUserBasicInfoJPA(int pageIndex, int pageSize) {
 		return userRepo.getAllUserBasicInfoJPA();
 	}
+
+	public User updateUserBySelect(User user) {
+		return userRepo.save(user);
+	}
 }

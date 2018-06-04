@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -164,6 +165,11 @@ public class HelloController {
         return userService.getAllUserBasicInfoJPA(pageIndex,pageSize);
     }
 	
-	
+	@ApiOperation(value = "修改用户信息", notes = "修改用户信息",produces = MediaType.ALL_VALUE)
+	@RequestMapping(value="/updateUserBySelect",method=RequestMethod.POST)
+	@ResponseBody
+	public User updateUserBySelect(@RequestBody User user){
+		return userService.updateUserBySelect(user);
+	}
 	
 }

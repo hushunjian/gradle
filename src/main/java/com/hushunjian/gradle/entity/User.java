@@ -7,6 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.SelectBeforeUpdate;
 import org.hibernate.annotations.Table;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -15,6 +18,9 @@ import lombok.Data;
 @Data
 @Table(appliesTo = "user",comment="用户表A")
 @Entity
+@DynamicInsert
+@DynamicUpdate
+@SelectBeforeUpdate
 public class User implements Serializable  {
 	private static final long serialVersionUID = 1L;
 	
@@ -30,7 +36,7 @@ public class User implements Serializable  {
 	
 	@ApiModelProperty(value="年龄",required=true)
 	@Column(name="age",columnDefinition="int(3) NOT NULL DEFAULT '30' COMMENT '年龄'")
-	private int age;  
+	private Integer age;  
 	
 	@ApiModelProperty(value="创建人",required=true)
 	@Column(name="created_by",columnDefinition="varchar(50) NOT NULL DEFAULT '' COMMENT '创建人'")
@@ -50,5 +56,5 @@ public class User implements Serializable  {
 
 	@ApiModelProperty(value="用户状态",required=true)
 	@Column(name="status",columnDefinition="int(2) NOT NULL DEFAULT 1 COMMENT '用户状态,0:禁用;1:正常'")
-	private int status;
+	private Integer status;
 }
