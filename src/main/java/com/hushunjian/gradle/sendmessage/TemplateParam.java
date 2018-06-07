@@ -10,4 +10,10 @@ public class TemplateParam {
     private String value;
     // 颜色
     private String color;
+	public TemplateParam(String name, String value, String color) {
+		super();
+		this.name = name;
+		this.value = value;
+		this.color = color;
+	}
 }

@@ -48,18 +48,15 @@ public class MeetingManageService {
 		//保存会议信息
 		MeetingManage meetingManage = MeetingManageMapper.INSTANCE.asMeetingManage(addMeetingRequest);
 		meetingManageRepo.save(meetingManage);
-		//String meetArea = meetingManage.getMeetArea();
-		//String meetTime = meetingManage.getMeetTime();
-		//String meetId = meetingManage.getMeetId();
 		//保存参与会议的人员信息
 		List<MeetingPersonRelation> meetingPersonRelations=MeetingManageMapper.INSTANCE.asMeetingPersonRelations(addMeetingRequest.getMeetingPersonRelationDtos());
 		for(MeetingPersonRelation meetingPersonRelation : meetingPersonRelations){
 			meetingPersonRelation.setMeetId(meetingManage.getMeetId());
 			meetingPersonRelationRepo.save(meetingPersonRelation);
 			//保存会议回执消息
-			MeetingReceiptInfo MeetingReceiptInfo = new  MeetingReceiptInfo();
-			MeetingReceiptInfo.setMeetingPersonRelationId(meetingPersonRelation.getId());
-			meetingReceiptInfoRepo.save(MeetingReceiptInfo);
+			MeetingReceiptInfo meetingReceiptInfo = new  MeetingReceiptInfo();
+			meetingReceiptInfo.setMeetingPersonRelationId(meetingPersonRelation.getId());
+			meetingReceiptInfoRepo.save(meetingReceiptInfo);
 		}
 		//保存会议关联的项目信息
 		List<MeetingProjectRelation> meetingProjectRelationDtos=MeetingManageMapper.INSTANCE.asMeetingProjectRelations(addMeetingRequest.getMeetingProjectRelationDtos());
@@ -97,42 +94,9 @@ public class MeetingManageService {
 		}
 		return meetingDtos;
 	}
-	
-	
-	
-	
-	
-	public List<MeetingDto> queryMeetByCriteria(QueryAllMeetingRequest queryAllMeetingRequest){
-		
-		
-		
-		
-		return null;
+
+	public List<MeetingManage> getAllMeetWhenTimeOverTwoFour() {
+		return meetingManageRepo.getAllMeetWhenTimeOverTwoFour();
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }

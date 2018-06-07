@@ -33,6 +33,10 @@ public class MeetingManage implements Serializable {
 	@Column(name="meet_create_person_id",columnDefinition="varchar(255) NOT NULL DEFAULT '' COMMENT '会议创建者id'")
 	private String meetCreatePersonId;
 	
+	@ApiModelProperty(value="会议创建者openId",required=true)
+	@Column(name="meet_create_person_open_id",columnDefinition="varchar(255) NOT NULL DEFAULT '' COMMENT '会议创建者openId'")
+	private String meetCreatePersonOpenId;
+	
 	@ApiModelProperty(value="会议创建者名称",required=true)
 	@Column(name="meet_create_person_name",columnDefinition="varchar(255) NOT NULL DEFAULT '' COMMENT '会议创建者id'")
 	private String meetCreatePersonName;

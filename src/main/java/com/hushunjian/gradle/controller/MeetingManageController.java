@@ -27,7 +27,7 @@ public class MeetingManageController extends BaseController {
 	
 	@PostMapping(value="/addMeeting",name="添加会议")
 	@ApiOperation(value="添加会议",notes="添加会议")
-	public Object addMeeting(@RequestBody AddMeetingRequest addMeetingRequest){
+	public Object addMeeting(@RequestBody  AddMeetingRequest addMeetingRequest){
 		meetingManageService.addMeeting(addMeetingRequest);
 		return success();
 	}

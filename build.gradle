@@ -31,9 +31,10 @@ repositories {
 
 
 dependencies {
+	compile('com.github.binarywang:weixin-java-mp:2.6.2.BETA')
     compile('org.springframework.boot:spring-boot-starter')
     compile('org.springframework.boot:spring-boot-starter-web')
-    compile 'io.swagger:swagger-jersey2-jaxrs:1.5.8'
+    compile('io.swagger:swagger-jersey2-jaxrs:1.5.8')
 	compile('io.springfox:springfox-swagger2:2.6.1')
 	compile('io.springfox:springfox-swagger-ui:2.6.1')
 	compile('com.mangofactory:swagger-springmvc:1.0.2')

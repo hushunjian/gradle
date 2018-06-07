@@ -31,7 +31,6 @@ public class Template {
                 param = templateParamList.get(i);
                 // 判断是否追加逗号
                 if (i < this.templateParamList.size() - 1) {
-
                     buffer.append(String.format("\"%s\": {\"value\":\"%s\",\"color\":\"%s\"},", param.getName(), param.getValue(), param.getColor()));
                 } else {
                     buffer.append(String.format("\"%s\": {\"value\":\"%s\",\"color\":\"%s\"}", param.getName(), param.getValue(), param.getColor()));

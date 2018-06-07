@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
+
+import lombok.Data;
 @Component
+@Data
 public abstract class SendTemplate implements Serializable {
 	private static final long serialVersionUID = 1L;
 	protected String templateId;//模板id
