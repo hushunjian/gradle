@@ -31,6 +31,7 @@ repositories {
 
 
 dependencies {
+ 	compile('net.sf.json-lib:json-lib:2.4:jdk15')
 	compile('com.github.binarywang:weixin-java-mp:2.6.2.BETA')
     compile('org.springframework.boot:spring-boot-starter')
     compile('org.springframework.boot:spring-boot-starter-web')

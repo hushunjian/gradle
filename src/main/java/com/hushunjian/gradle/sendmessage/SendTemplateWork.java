@@ -11,13 +11,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper=false)
 public class SendTemplateWork extends SendTemplate implements Serializable {
 	private static final long serialVersionUID = 1L;
-
 	private String messageType;//消息类型
-
     private String userName;//发起消息的用户名称
-
     private String content;//发送的模板消息的内容
-
     private String url;//发送的模板消息跳转的链接
 
     public SendTemplateWork(String messageType, String content, String url, String openId, String userName, String templateId) {

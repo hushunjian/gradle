@@ -6,10 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hushunjian.gradle.entity.MeetingManage;
+import com.hushunjian.gradle.repo.AccessTokenRepo;
 import com.hushunjian.gradle.sendmessage.SendTemplate;
 import com.hushunjian.gradle.sendmessage.SendTemplateWork;
 import com.hushunjian.gradle.sendmessage.Template;
 import com.hushunjian.gradle.sendmessage.WechatMpProperties;
+import com.hushunjian.gradle.task.GetWeChatAccessTokenTask;
+import com.hushunjian.gradle.util.WeiXinUtil;
+
+import net.sf.json.JSONObject;
 
 @Service
 public class WeChatService {
@@ -18,6 +23,10 @@ public class WeChatService {
 	private WechatMpProperties wechatMpProperties;
 	@Autowired
 	private MeetingManageService meetingManageService; 
+	@Autowired
+	private AccessTokenRepo accessTokenRepo;
+	@Autowired
+	private GetWeChatAccessTokenTask getWeChatAccessTokenTask;
 	
 	private List<MeetingManage> getAllMeetWhenTimeOverTwoFour(){
 		return meetingManageService.getAllMeetWhenTimeOverTwoFour();
@@ -43,7 +52,24 @@ public class WeChatService {
 
 	private int sendWeChatMessage(SendTemplate sendTemplate, int num){
 		Template template = sendTemplate.returnTemplate();
-		
-		return 0;
+		String accessToken = accessTokenRepo.findAll().get(0).getToken();
+		String requestUrl = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=ACCESS_TOKEN";
+        requestUrl = requestUrl.replace("ACCESS_TOKEN", accessToken);
+        JSONObject jsonResult = WeiXinUtil.httpRequest(requestUrl, "POST", template.toJSON());
+        if (jsonResult != null) {
+            int errorCode = jsonResult.getInt("errcode");
+            switch (errorCode) {
+                case 40001:
+                    if (num < 5) {
+                    	getWeChatAccessTokenTask.execute();
+                        sendWeChatMessage(sendTemplate, ++num);
+                    } else {
+                        break;
+                    }
+                    break;
+            }
+            return errorCode;
+        }
+		return -1;
 	}
 }

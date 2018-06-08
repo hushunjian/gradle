@@ -7,6 +7,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 /**
  * Created by huyongzhi on 2017/7/12.
  */
@@ -22,6 +25,8 @@ import lombok.Data;
 @Component
 @Table(name="PF_ACCESS_TOKEN_T")
 @Data
+@DynamicInsert
+@DynamicUpdate
 public class AccessToken {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -30,7 +35,7 @@ public class AccessToken {
 
     @Column(name="token",columnDefinition="varchar(255) NOT NULL DEFAULT '' COMMENT '获取到的凭证'")
     private String token;
-    
-    @Column(name="expires_in",columnDefinition="varchar(10) NOT NULL DEFAULT '' COMMENT '凭证有效时间，单位：秒'")
-    private String expiresIn;
+
+    @Column(name="expires_in",columnDefinition="int(10) NOT NULL DEFAULT 7200 COMMENT '凭证有效时间(默认有效时间为两小时),单位:秒'")
+    private int expiresIn;
 }
