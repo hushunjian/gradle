@@ -32,7 +32,7 @@ public class GetWeChatAccessTokenTask {
 	@Autowired
 	private AccessTokenRepo accessTokenRepo;
 	
-	@Scheduled(fixedDelay = 2 * 60 * 60 * 1000)//每隔两小时取一次
+	//@Scheduled(fixedDelay = 2 * 60 * 60 * 1000)//每隔两小时取一次
 	public void execute(){
 		AccessToken accessToken = new AccessToken();
 		if(StringUtils.isEmpty(wechatMpProperties.getTokenGetType())){

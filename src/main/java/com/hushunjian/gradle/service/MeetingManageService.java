@@ -5,11 +5,22 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaBuilder.In;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.hushunjian.gradle.copier.MeetingManageMapper;
@@ -73,11 +84,19 @@ public class MeetingManageService {
 	}
 
 	public List<MeetingDto> queryMeet(QueryAllMeetingRequest queryAllMeetingRequest) {
-		//设置分页
+		List<MeetingDto> meetingDtos = new ArrayList<MeetingDto>();
+		
+		List<Long> personRelationMeetIds = meetingPersonRelationRepo.findByMeetPersonId(queryAllMeetingRequest.getLongInPersonId());
+		//根据relationProjectIds,personRelationMeetIds查询出meetId
+		List<Long> projectRelationMeetIds = meetingProjectRelationRepo.findByMeetProjectIdsAndMeetIds(queryAllMeetingRequest.getRelationProjectIds(),personRelationMeetIds);
+		queryAllMeeting(queryAllMeetingRequest,projectRelationMeetIds);
+		
+		
+		
+/*		//设置分页
 		Pageable pageable=new PageRequest(queryAllMeetingRequest.getPageNo()-1,queryAllMeetingRequest.getPageSize());
 		//根据longInPersonId查询出所有参加的会议
 		List<Long> meetingIds = meetingPersonRelationRepo.getAllMeetingIdByPersonId(queryAllMeetingRequest.getLongInPersonId(),pageable);
-		List<MeetingDto> meetingDtos = new ArrayList<MeetingDto>();
 		//根据meetingIds查出所有需要的信息
 		for(Long meetId : meetingIds){
 			MeetingDto meetingDto = new MeetingDto();
@@ -91,8 +110,31 @@ public class MeetingManageService {
 			List<MeetingProjectRelation> meetingProjectRelations = meetingProjectRelationRepo.findAllProjectByMeetId(meetId);
 			meetingDto.setMeetingProjectRelations(meetingProjectRelations);
 			meetingDtos.add(meetingDto);
-		}
+		}*/
 		return meetingDtos;
+	}
+	
+	private Page<MeetingManage> queryAllMeeting(QueryAllMeetingRequest queryAllMeetingRequest,List<Long> ids){
+		//分页,排序
+		Sort sort = new Sort(Direction.DESC, "meetId");
+		Pageable pageable = new PageRequest(queryAllMeetingRequest.getPageNo()-1,queryAllMeetingRequest.getPageSize(),sort);
+		Page<MeetingManage> meetingManagePage = meetingManageRepo.findAll(new Specification<MeetingManage>() {
+			@Override
+			public Predicate toPredicate(Root<MeetingManage> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				Predicate predicate = cb.conjunction();
+	            List<Expression<Boolean>> expressions = predicate.getExpressions();
+	            if(StringUtils.isNotBlank(queryAllMeetingRequest.getLongInPersonId())){
+	            	expressions.add(cb.equal(root.<String>get("meetCreatePersonId"), queryAllMeetingRequest.getLongInPersonId()));
+	            }
+	            In<Long> in = cb.in(root.<Long>get("meetId"));
+	            for(Long id : ids){
+	            	in.value(id);
+	            }
+	            expressions.add(in);
+				return predicate;
+			}
+		}, pageable);
+		return meetingManagePage;
 	}
 
 	public List<MeetingManage> getAllMeetWhenTimeOverTwoFour() {

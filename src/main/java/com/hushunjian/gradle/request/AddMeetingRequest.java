@@ -46,7 +46,7 @@ public class AddMeetingRequest {
     private String meetAdjunctAddress;
     
 	@ApiModelProperty(value="会议状态(0:未召开 1:已结束)",required=true)
-    private String meetStatus;
+    private int meetStatus;
 	
 	@ApiModelProperty(value="设置会议提醒",required=false)
 	private TimerTaskDto timerTaskDto;

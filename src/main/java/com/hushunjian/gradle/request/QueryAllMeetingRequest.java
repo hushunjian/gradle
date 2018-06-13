@@ -26,7 +26,7 @@ public class QueryAllMeetingRequest {
 	private List<Long> meetIds;//登录者参与的所有会议Id
 	
 	@ApiModelProperty(value="会议关联项目id",required=false)
-	private List<String> relationProjectId;
+	private List<String> relationProjectIds;
 
 	
 	@ApiModelProperty(value="页码",required=false)

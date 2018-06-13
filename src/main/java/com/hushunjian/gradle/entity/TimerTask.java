@@ -28,14 +28,14 @@ public class TimerTask {
 	
 	@ApiModelProperty(name="会议首次提醒提前分钟数",required=true)
 	@Column(name="first_remind_time",columnDefinition="int(5) NOT NULL DEFAULT 0 COMMENT '会议首次提醒提前分钟数'")
-	private String firstRemindTime;
+	private int firstRemindTime;
 
 	@ApiModelProperty(name="会议提醒间隔时间分钟数",required=true)
 	@Column(name="remind_interval_time",columnDefinition="int(5) NOT NULL DEFAULT 0 COMMENT '会议提醒间隔时间分钟数'")
-	private String remindIntervalTime;
+	private int remindIntervalTime;
 
 	@ApiModelProperty(name="会议提醒次数",required=true)
 	@Column(name="repeat_count",columnDefinition="int(5) NOT NULL DEFAULT 0 COMMENT '会议提醒次数'")
-	private String repeatCount;
+	private int repeatCount;
 
 }

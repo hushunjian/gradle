@@ -16,4 +16,7 @@ public interface MeetingPersonRelationRepo extends JpaRepository<MeetingPersonRe
 	@Query(value="SELECT t1 FROM MeetingPersonRelation t1 WHERE t1.meetId=?1")
 	List<MeetingPersonRelation> findAllPersonByMeetId(Long meetId);
 
+	@Query("SELECT t1.meetId FROM MeetingPersonRelation t1 WHERE t1.meetPersonId = ?1")
+	List<Long> findByMeetPersonId(String longInPersonId);
+
 }
