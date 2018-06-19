@@ -86,9 +86,15 @@ public class MeetingManageService {
 	public List<MeetingDto> queryMeet(QueryAllMeetingRequest queryAllMeetingRequest) {
 		List<MeetingDto> meetingDtos = new ArrayList<MeetingDto>();
 		
-		List<Long> personRelationMeetIds = meetingPersonRelationRepo.findByMeetPersonId(queryAllMeetingRequest.getLongInPersonId());
+		/*List<Long> personRelationMeetIds = meetingPersonRelationRepo.findByMeetPersonId(queryAllMeetingRequest.getLongInPersonId());
 		//根据relationProjectIds,personRelationMeetIds查询出meetId
-		List<Long> projectRelationMeetIds = meetingProjectRelationRepo.findByMeetProjectIdsAndMeetIds(queryAllMeetingRequest.getRelationProjectIds(),personRelationMeetIds);
+		List<Long> projectRelationMeetIds = meetingProjectRelationRepo.findByMeetProjectIdsAndMeetIds(queryAllMeetingRequest.getRelationProjectIds(),personRelationMeetIds);*/
+		List<Long> projectRelationMeetIds = new ArrayList<>();
+		projectRelationMeetIds.add(2L);
+		projectRelationMeetIds.add(3L);
+		projectRelationMeetIds.add(4L);
+		projectRelationMeetIds.add(5L);
+		projectRelationMeetIds.add(6L);
 		queryAllMeeting(queryAllMeetingRequest,projectRelationMeetIds);
 		
 		
@@ -117,6 +123,15 @@ public class MeetingManageService {
 	private Page<MeetingManage> queryAllMeeting(QueryAllMeetingRequest queryAllMeetingRequest,List<Long> ids){
 		//分页,排序
 		Sort sort = new Sort(Direction.DESC, "meetId");
+		if(queryAllMeetingRequest.getPageNo()==null || queryAllMeetingRequest.getPageNo()<=0){
+			queryAllMeetingRequest.setPageNo(1);
+		}
+		if(queryAllMeetingRequest.getPageSize()==null || queryAllMeetingRequest.getPageSize()<=0){
+			queryAllMeetingRequest.setPageSize(10);
+		}
+		if(queryAllMeetingRequest.getLongInPersonId()==null){
+			queryAllMeetingRequest.setLongInPersonId("1");
+		}
 		Pageable pageable = new PageRequest(queryAllMeetingRequest.getPageNo()-1,queryAllMeetingRequest.getPageSize(),sort);
 		Page<MeetingManage> meetingManagePage = meetingManageRepo.findAll(new Specification<MeetingManage>() {
 			@Override
@@ -130,6 +145,7 @@ public class MeetingManageService {
 	            for(Long id : ids){
 	            	in.value(id);
 	            }
+	            //or操作?
 	            expressions.add(in);
 				return predicate;
 			}

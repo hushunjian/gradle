@@ -48,6 +48,7 @@ dependencies {
 	compile("org.mapstruct:mapstruct-jdk8:${mapstructVersion}")
     apt("org.mapstruct:mapstruct-processor:${mapstructVersion}")
     apt("org.projectlombok:lombok:${lombokVersion}")
+    testCompile('org.jmockit:jmockit:1.20')
     testCompile('org.testng:testng:6.10')
     testCompile('org.easytesting:fest-assert:1.4')
     testCompile('org.springframework.boot:spring-boot-starter-test')
