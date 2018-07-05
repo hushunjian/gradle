@@ -17,6 +17,7 @@ import com.hushunjian.gradle.copier.SourceTargetMapper;
 import com.hushunjian.gradle.dto.UserBasicInfoDto;
 import com.hushunjian.gradle.entity.Operator;
 import com.hushunjian.gradle.entity.User;
+import com.hushunjian.gradle.request.QueryUserRequest;
 import com.hushunjian.gradle.searchConditionEntiy.GetAllUserByConditionEntity;
 import com.hushunjian.gradle.service.UserService;
 
@@ -151,6 +152,13 @@ public class HelloController {
 	@ResponseBody
 	public User updateUser(@ModelAttribute User user){
 		return userService.updateUser(user);
+	}
+	
+	@ApiOperation(value = "根据名字模糊查询用户信息", notes = "根据名字模糊查询用户信息",produces = MediaType.ALL_VALUE)
+	@RequestMapping(value="/getAllUserByConditionVo",method=RequestMethod.POST)
+	@ResponseBody
+	public List<User> getAllUserByConditionVo(@RequestBody QueryUserRequest queryUserRequest){
+		return userService.getAllUserByConditionVo(queryUserRequest);
 	}
 	
 	@ApiOperation(value = "获取用户信息", notes = "获取用户信息以及创建人信息",produces = MediaType.ALL_VALUE)

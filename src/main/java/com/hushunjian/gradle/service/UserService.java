@@ -26,6 +26,7 @@ import com.hushunjian.gradle.entity.Operator;
 import com.hushunjian.gradle.entity.User;
 import com.hushunjian.gradle.repo.OperatorRepo;
 import com.hushunjian.gradle.repo.UserRepo;
+import com.hushunjian.gradle.request.QueryUserRequest;
 import com.hushunjian.gradle.searchConditionEntiy.GetAllUserByConditionEntity;
 
 @Service
@@ -103,5 +104,12 @@ public class UserService {
 
 	public User updateUserBySelect(User user) {
 		return userRepo.save(user);
+	}
+
+	public List<User> getAllUserByConditionVo(QueryUserRequest queryUserRequest) {
+		Sort sort = new Sort(Direction.DESC, "id");
+		Pageable pageable=new PageRequest(queryUserRequest.getPageNo()-1,queryUserRequest.getPageSize(),sort);
+		List<User> users = userRepo.getAllUserByConditionVo("%"+queryUserRequest.getUserName()+"%",pageable);
+		return users;
 	}
 }
