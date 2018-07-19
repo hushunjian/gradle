@@ -29,7 +29,7 @@ import io.swagger.annotations.ApiOperation;
 //页面访问路径http://localhost:8080/swagger-ui.html
 @RestController
 @Api(value = "Sample", description = "范例相关接口",produces = MediaType.ALL_VALUE)
-public class HelloController {
+public class HelloController extends BaseController {
 	
 	@Autowired
 	private UserService userService;
@@ -179,5 +179,25 @@ public class HelloController {
 	public User updateUserBySelect(@RequestBody User user){
 		return userService.updateUserBySelect(user);
 	}
+	
+	@ApiOperation(value = "删除用户", notes = "根据用户姓名删除用户信息",produces = MediaType.ALL_VALUE)
+	@RequestMapping(value="/deleteUserByUserName",method=RequestMethod.GET)
+	@ApiImplicitParams({
+        @ApiImplicitParam(name = "userName",value = "用户姓名",required =true,paramType = "query",dataType="String")
+	})
+	@ResponseBody
+    public Object deleteUserByUserName(@RequestParam(value="userName",required=true) String userName){
+        System.out.println("getAllUserByUserName:userName:"+userName);
+        userService.deleteUserByUserName(userName);
+        return success("删除用户成功");
+    }
+	
+	@ApiOperation(value = "获取所有用户的年纪总和", notes = "获取所有用户的年纪总和",produces = MediaType.ALL_VALUE)
+	@RequestMapping(value="/getAllUserAgeSum",method=RequestMethod.GET)
+	@ResponseBody
+    public Object getAllUserAgeSum(){
+		Long ageSum =userService.getAllUserAgeSum();
+        return success("获取所有用户的年纪总和成功");
+    }
 	
 }

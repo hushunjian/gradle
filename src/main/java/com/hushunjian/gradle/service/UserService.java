@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.transaction.Transactional;
 
 import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
@@ -31,6 +32,7 @@ import com.hushunjian.gradle.searchConditionEntiy.GetAllUserByConditionEntity;
 
 @Service
 @SuppressWarnings("all")
+@Transactional
 public class UserService {
 	
 	@Autowired
@@ -111,5 +113,13 @@ public class UserService {
 		Pageable pageable=new PageRequest(queryUserRequest.getPageNo()-1,queryUserRequest.getPageSize(),sort);
 		List<User> users = userRepo.getAllUserByConditionVo("%"+queryUserRequest.getUserName()+"%",pageable);
 		return users;
+	}
+
+	public void deleteUserByUserName(String userName) {
+		userRepo.deleteByUserName(userName);
+	}
+
+	public Long getAllUserAgeSum() {
+		return userRepo.sumByAge();
 	}
 }

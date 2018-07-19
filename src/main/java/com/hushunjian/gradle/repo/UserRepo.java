@@ -20,4 +20,8 @@ public interface UserRepo extends JpaRepository<User, Long> {
 
 	@Query("select user from User user where user.userName like ?1")
 	List<User> getAllUserByConditionVo(String userName, Pageable pageable);
+
+	Object deleteByUserName(String userName);
+
+	Long sumByAge();
 }
