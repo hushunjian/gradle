@@ -22,6 +22,4 @@ public interface UserRepo extends JpaRepository<User, Long> {
 	List<User> getAllUserByConditionVo(String userName, Pageable pageable);
 
 	Object deleteByUserName(String userName);
-
-	Long sumByAge();
 }

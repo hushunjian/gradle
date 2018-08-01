@@ -120,6 +120,6 @@ public class UserService {
 	}
 
 	public Long getAllUserAgeSum() {
-		return userRepo.sumByAge();
+		return 0L;
 	}
 }

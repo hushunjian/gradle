@@ -1,0 +1,53 @@
+package com.hushunjian.gradle.controller;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.hushunjian.gradle.dto.ExcelData;
+import com.hushunjian.gradle.dto.OperatorDTO;
+import com.hushunjian.gradle.request.ExportOperatorRequest;
+import com.hushunjian.gradle.service.ExportService;
+import com.hushunjian.gradle.util.ExportExcelUtils;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
+@RestController("ExportController")
+@Api(value = "ExportController", description = "excel导出接口",produces = MediaType.ALL_VALUE)
+@RequestMapping(value = "/export")
+public class ExportController extends BaseController {
+
+	@Autowired
+	private ExportService exportService;
+	
+	@ResponseBody
+	@PostMapping(value="/export")
+	@ApiOperation(value="post请求导出excel")
+	public Object export(HttpServletResponse response,@RequestBody ExportOperatorRequest exportOperatorRequest) throws IOException{
+		List<OperatorDTO> operatorDTOs = exportService.export(exportOperatorRequest);
+		if(operatorDTOs.size()>0){
+			ExcelData data = new ExcelData();
+        	List<Object> beans = new ArrayList<Object>();
+        	for(OperatorDTO operatorDTO : operatorDTOs){
+        		beans.add(operatorDTO);
+        	}
+        	data = ExportExcelUtils.setExcelData(beans);
+        	ExportExcelUtils.exportExcel(response,"导出人员信息.xlsx",data);
+		}else{
+			return success("暂无数据");
+		}
+		return success();
+	}
+	
+}
