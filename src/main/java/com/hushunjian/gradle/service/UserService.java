@@ -28,6 +28,7 @@ import com.hushunjian.gradle.entity.User;
 import com.hushunjian.gradle.repo.OperatorRepo;
 import com.hushunjian.gradle.repo.UserRepo;
 import com.hushunjian.gradle.request.QueryUserRequest;
+import com.hushunjian.gradle.request.User1Request;
 import com.hushunjian.gradle.searchConditionEntiy.GetAllUserByConditionEntity;
 
 @Service
@@ -121,5 +122,10 @@ public class UserService {
 
 	public Long getAllUserAgeSum() {
 		return 0L;
+	}
+
+	public List<User> getAllUserTest(User1Request user1Request) {
+		System.out.println("sssssssssss");
+		return null;
 	}
 }

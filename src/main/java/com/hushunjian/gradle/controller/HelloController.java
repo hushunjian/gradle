@@ -27,7 +27,8 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
 //页面访问路径http://localhost:8080/swagger-ui.html
-@RestController
+@RestController("HelloController")
+@RequestMapping(value = "/hello")
 @Api(value = "Sample", description = "范例相关接口",produces = MediaType.ALL_VALUE)
 public class HelloController extends BaseController {
 	
@@ -36,7 +37,7 @@ public class HelloController extends BaseController {
 	
 	
 	@ApiOperation(value = "欢迎页", notes = "欢迎页信息",produces = MediaType.ALL_VALUE)
-	@RequestMapping(value="/",method=RequestMethod.POST)
+	@RequestMapping(value="/sayHello",method=RequestMethod.POST)
 	@ResponseBody
 	public String sayHello(){
 		return "hello";
@@ -196,7 +197,6 @@ public class HelloController extends BaseController {
 	@RequestMapping(value="/getAllUserAgeSum",method=RequestMethod.GET)
 	@ResponseBody
     public Object getAllUserAgeSum(){
-		Long ageSum =userService.getAllUserAgeSum();
         return success("获取所有用户的年纪总和成功");
     }
 	
