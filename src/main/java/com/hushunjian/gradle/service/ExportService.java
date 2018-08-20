@@ -21,7 +21,7 @@ public class ExportService {
 	private OperatorRepo operatorRepo;
 
 	public List<OperatorDTO> export(ExportOperatorRequest exportOperatorRequest) {
-		List<Operator> operators = operatorRepo.findByOperatorNameLike("%"+exportOperatorRequest.getOperatorName()+"%");
+		List<Operator> operators = operatorRepo.findByOperatorNameLike("%"+"张三"+"%");
 		List<OperatorDTO> operatorDTOs = OperatorMapper.INSTANCE.asOperatorDTOs(operators);
 		return operatorDTOs;
 	}

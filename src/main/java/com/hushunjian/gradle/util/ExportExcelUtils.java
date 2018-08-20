@@ -103,7 +103,7 @@ public class ExportExcelUtils {
 	
 	public static void exportExcel(HttpServletResponse response, String fileName, ExcelData data) throws IOException{
 		try {
-	        response.setHeader("content-Type", "application/vnd.ms-excel");
+	        response.setHeader("content-Type", "application/octet-stream");
 	        response.setHeader("Content-Disposition", "attachment;filename="+URLEncoder.encode(fileName, "utf-8"));
 			exportExcel(data, response.getOutputStream());
 		} catch (IOException e) {
