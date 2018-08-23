@@ -2,6 +2,7 @@ package com.hushunjian.gradle.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,4 +28,11 @@ public class TestController{
     public void tesetReturn(@RequestParam(value="num",required=true) Integer num){
 		testService.tesetReturn(num);
     }
+	
+	@ApiOperation(value = "测试return", notes = "测试return",produces = MediaType.ALL_VALUE)
+	@GetMapping(value="/testEntity")
+	@ResponseBody
+	public void testEntity(){
+		
+	}
 }
