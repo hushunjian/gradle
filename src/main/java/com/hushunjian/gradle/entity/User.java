@@ -1,6 +1,7 @@
 package com.hushunjian.gradle.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -57,4 +58,7 @@ public class User implements Serializable  {
 	@ApiModelProperty(value="用户状态",required=true)
 	@Column(name="status",columnDefinition="int(2) NOT NULL DEFAULT 1 COMMENT '用户状态,0:禁用;1:正常'")
 	private Integer status;
+	
+	@Column(name="number",columnDefinition="decimal(10,4) NOT NULL DEFAULT '0.0000' COMMENT '数量'")
+	private BigDecimal number;
 }

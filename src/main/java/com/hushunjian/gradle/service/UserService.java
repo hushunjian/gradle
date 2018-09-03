@@ -1,5 +1,6 @@
 package com.hushunjian.gradle.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -7,6 +8,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -127,5 +129,13 @@ public class UserService {
 	public List<User> getAllUserTest(User1Request user1Request) {
 		System.out.println("sssssssssss");
 		return null;
+	}
+
+	public BigDecimal testNumber(String userName) {
+		List<User> users = userRepo.findByUserNameLike(userName);
+		if(CollectionUtils.isEmpty(users)){
+			return null;
+		}
+		return users.get(0).getNumber();
 	}
 }

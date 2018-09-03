@@ -1,19 +1,19 @@
 package com.hushunjian.gradle.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hushunjian.gradle.entity.User;
-import com.hushunjian.gradle.request.QueryUserRequest;
 import com.hushunjian.gradle.request.User1Request;
 import com.hushunjian.gradle.service.UserService;
 
@@ -33,6 +33,12 @@ public class UserController{
 	@PostMapping(value="/getAllUserTest")
 	public List<User> getAllUserTest(@Validated @RequestBody User1Request user1Request){
 		return userService.getAllUserTest(user1Request);
+	}
+	
+	@ApiOperation(value = "测试BigDecimal数字")
+	@GetMapping(value="/testNumber")
+	public BigDecimal testNumber(@RequestParam(value="userName",required=true) String userName){
+		return userService.testNumber(userName);
 	}
 	
 }

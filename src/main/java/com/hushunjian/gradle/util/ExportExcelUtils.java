@@ -20,11 +20,13 @@ import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.xssf.usermodel.extensions.XSSFCellBorder.BorderSide;
+import org.springframework.http.MediaType;
 
 import com.hushunjian.gradle.annotation.ExcelTitle;
 import com.hushunjian.gradle.dto.ExcelData;
@@ -103,7 +105,7 @@ public class ExportExcelUtils {
 	
 	public static void exportExcel(HttpServletResponse response, String fileName, ExcelData data) throws IOException{
 		try {
-	        response.setHeader("content-Type", "application/octet-stream");
+	        response.setHeader("content-Type", MediaType.APPLICATION_OCTET_STREAM_VALUE);
 	        response.setHeader("Content-Disposition", "attachment;filename="+URLEncoder.encode(fileName, "utf-8"));
 			exportExcel(data, response.getOutputStream());
 		} catch (IOException e) {
@@ -153,6 +155,13 @@ public class ExportExcelUtils {
 			cell.setCellStyle(titleStyle);
 			colIndex++;
 		}
+		// 开始行  结束行  开始列    结束列
+		CellRangeAddress region1 = new CellRangeAddress(0,1,0,0);
+		sheet.addMergedRegion(region1);
+		CellRangeAddress region2 = new CellRangeAddress(0,1,1,1);
+		sheet.addMergedRegion(region2);
+		CellRangeAddress region3 = new CellRangeAddress(0,0,2,3);
+		sheet.addMergedRegion(region3);
         rowIndex++;
         return rowIndex;
     }
