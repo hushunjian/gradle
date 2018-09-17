@@ -1,4 +1,4 @@
-package com.hushunjian.gradle;
+package com.hushunjian.gradle.response;
 
 import java.io.Serializable;
 

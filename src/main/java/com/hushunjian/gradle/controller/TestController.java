@@ -29,11 +29,11 @@ public class TestController{
 		testService.tesetReturn(num);
     }
 	
-	@ApiOperation(value = "测试return", notes = "测试return",produces = MediaType.ALL_VALUE)
-	@GetMapping(value="/testEntity")
+	@ApiOperation(value = "测试String-Integer",produces = MediaType.ALL_VALUE)
+	@GetMapping(value="/test")
 	@ResponseBody
-	public void testEntity(){
-		
+	public void test(){
+		testService.test();
 	}
 	
 	

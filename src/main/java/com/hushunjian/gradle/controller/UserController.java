@@ -41,4 +41,10 @@ public class UserController{
 		return userService.testNumber(userName);
 	}
 	
+	@ApiOperation(value = "根据名字模糊查询用户信息", notes = "根据名字模糊查询用户信息",produces = MediaType.ALL_VALUE)
+	@PostMapping(value="/test")
+	public List<User> test(@Validated @RequestBody User1Request user1Request){
+		return userService.getAllUserTest(user1Request);
+	}
+	
 }

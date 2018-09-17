@@ -17,7 +17,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name="MEETING_PROJECT_RELATION")
-@ApiModel(value="会议人员信息表")
+@ApiModel(value="会议关联项目信息表")
 @DynamicInsert
 public class MeetingProjectRelation implements Serializable {
 	private static final long serialVersionUID = 1L;
