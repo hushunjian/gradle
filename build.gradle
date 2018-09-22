@@ -46,6 +46,7 @@ dependencies {
 	runtime('mysql:mysql-connector-java') 
 	compile('com.rabbitmq:amqp-client:4.0.0')
 	compile('org.apache.poi:poi-ooxml:3.17')
+	compile 'net.sf.mpxj:mpxj:7.2.1'
 	compile('org.springframework.boot:spring-boot-starter-tomcat') 
 	compile("org.mapstruct:mapstruct-jdk8:${mapstructVersion}")
     apt("org.mapstruct:mapstruct-processor:${mapstructVersion}")

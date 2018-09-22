@@ -13,14 +13,14 @@ import javax.persistence.Id;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SelectBeforeUpdate;
-import org.hibernate.annotations.Table;
+import javax.persistence.Table;
 
 import com.hushunjian.gradle.enumeration.CourseEnum;
 
 import lombok.Data;
 
 @Data
-@Table(appliesTo = "jpa_2",comment="jpa测试表2")
+@Table(name = "jpa_2")
 @Entity
 @DynamicInsert
 @DynamicUpdate

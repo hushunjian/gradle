@@ -10,13 +10,13 @@ import javax.persistence.Id;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SelectBeforeUpdate;
-import org.hibernate.annotations.Table;
+import javax.persistence.Table;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-@Table(appliesTo = "jpa_1",comment="jpa测试表1")
+@Table(name = "jpa_1")
 @Entity
 @DynamicInsert
 @DynamicUpdate
