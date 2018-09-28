@@ -10,4 +10,7 @@ import com.hushunjian.gradle.entity.JPAEntityA;
 public interface JPAXMLRepo extends JpaRepository<JPAEntityA, Long> {
 	
 	List<JPAEntityA> test(@Param("userName")String userName);
+
+	List<String> findUserNameByUserNameLike(String userName);
+
 }

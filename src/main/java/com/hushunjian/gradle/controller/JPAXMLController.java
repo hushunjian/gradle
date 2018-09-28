@@ -28,4 +28,10 @@ public class JPAXMLController{
 		return jPAXMLService.test(userName);
 	}
 	
+	@GetMapping(value="/test2")
+	@ApiOperation(value="JPAXML-test2")
+	public List<String> test2(@RequestParam("userName")String userName){
+		return jPAXMLService.test2(userName);
+	}
+	
 }

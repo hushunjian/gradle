@@ -21,4 +21,8 @@ public class JPAXMLService {
 		return jPAXMLRepo.test(userName);
 	}
 
+	public List<String> test2(String userName) {
+		return jPAXMLRepo.findUserNameByUserNameLike('%' + userName + '%');
+	}
+
 }
