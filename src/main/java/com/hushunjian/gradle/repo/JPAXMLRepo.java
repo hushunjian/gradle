@@ -12,5 +12,9 @@ public interface JPAXMLRepo extends JpaRepository<JPAEntityA, Long> {
 	List<JPAEntityA> test(@Param("userName")String userName);
 
 	List<String> findUserNameByUserNameLike(String userName);
+	
+	
+	List<JPAEntityA> findByUserNameIn(List<String> userNames);
 
 }
+	

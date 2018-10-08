@@ -25,4 +25,8 @@ public class JPAXMLService {
 		return jPAXMLRepo.findUserNameByUserNameLike('%' + userName + '%');
 	}
 
+	public List<JPAEntityA> test3(List<String> userNames) {
+		return jPAXMLRepo.findByUserNameIn(userNames);
+	}
+
 }
