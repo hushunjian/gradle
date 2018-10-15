@@ -47,6 +47,8 @@ dependencies {
 	compile('com.rabbitmq:amqp-client:4.0.0')
 	compile('org.apache.poi:poi-ooxml:3.17')
 	compile 'net.sf.mpxj:mpxj:7.2.1'
+	compile group: 'com.querydsl', name: 'querydsl-sql-spatial', version: '4.1.4'
+	compile group: 'com.querydsl', name: 'querydsl-apt', version: '4.1.4'
 	compile('org.springframework.boot:spring-boot-starter-tomcat') 
 	compile("org.mapstruct:mapstruct-jdk8:${mapstructVersion}")
     apt("org.mapstruct:mapstruct-processor:${mapstructVersion}")

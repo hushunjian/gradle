@@ -1,11 +1,13 @@
 package com.hushunjian.gradle.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hushunjian.gradle.dto.StringToIntegerDTO;
+import com.hushunjian.gradle.entity.TestStringToInteger;
 import com.hushunjian.gradle.repo.StringToIntegerRepo;
 
 @Service
@@ -27,6 +29,11 @@ public class TestService {
 		System.out.println(sum);
 		StringToIntegerDTO stringToIntegerDTO = stringToIntegerRepo.test1();
 		System.out.println(stringToIntegerDTO.getSum());
+	}
+
+	public void testSave() {
+		List<TestStringToInteger> save = new ArrayList<>();
+		stringToIntegerRepo.save(save);
 	}
 	
 
