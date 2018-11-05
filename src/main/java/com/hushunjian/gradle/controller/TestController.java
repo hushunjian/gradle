@@ -62,9 +62,27 @@ public class TestController{
         return vStr;
     }
 	
+	@ResponseBody
 	@PostMapping(value = "/stringToYesOrNoEnum")
 	public YesOrNoEnum stringToYesOrNoEnum(@RequestBody YesOrNoEnum yesOrNoEnum){
 		return yesOrNoEnum;
 	}
 	
+	@ApiOperation(value = "testSave1",produces = MediaType.ALL_VALUE)
+	@GetMapping(value="/testSave1")
+	public Long testSave1(@RequestParam Long num){
+		return testService.testSave1(num);
+	}
+	
+	@ApiOperation(value = "testSave2",produces = MediaType.ALL_VALUE)
+	@GetMapping(value="/testSave2")
+	public Long testSave2(@RequestParam Long num){
+		return testService.testSave2(num);
+	}
+	
+	@ApiOperation(value = "testSave3",produces = MediaType.ALL_VALUE)
+	@GetMapping(value="/testSave3")
+	public Long testSave3(@RequestParam Long num){
+		return testService.testSave3(num);
+	}
 }

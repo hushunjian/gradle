@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -158,7 +159,7 @@ public class HelloController extends BaseController {
 	@ApiOperation(value = "根据名字模糊查询用户信息", notes = "根据名字模糊查询用户信息",produces = MediaType.ALL_VALUE)
 	@RequestMapping(value="/getAllUserByConditionVo",method=RequestMethod.POST)
 	@ResponseBody
-	public List<User> getAllUserByConditionVo(@RequestBody QueryUserRequest queryUserRequest){
+	public List<User> getAllUserByConditionVo(@RequestBody @Validated QueryUserRequest queryUserRequest){
 		return userService.getAllUserByConditionVo(queryUserRequest);
 	}
 	
