@@ -7,13 +7,15 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 周期计划表
@@ -21,7 +23,8 @@ import lombok.Data;
  * @author hushunjian
  *
  */
-@Data
+@Setter
+@Getter
 @Table
 @Entity(name = "my_progress_plan")
 public class ProgressPlanEntity implements Serializable {
@@ -35,6 +38,6 @@ public class ProgressPlanEntity implements Serializable {
 	@Column(name = "name")
 	private String name;
 
-	@OneToMany(mappedBy = "progressPlan",cascade = CascadeType.ALL,orphanRemoval = true)
-	private List<ProgressPlanTaskEntity> progressPlanTasks = new ArrayList<ProgressPlanTaskEntity>();
+	@OneToMany(mappedBy = "progressPlan",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
+	private List<ProgressPlanTaskEntity> progressPlanTasks = new ArrayList<>();
 }
