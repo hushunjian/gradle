@@ -4,8 +4,11 @@ import java.time.ZonedDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
@@ -40,4 +43,8 @@ public class Task {
 
 	@Column(name = "plan_end_date", columnDefinition = "datetime(6) DEFAULT NULL COMMENT '计划结束时间'")
 	private ZonedDateTime planEndDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "important_task_id")
+    private ImportantTaskEntity importantTaskEntity;
 }

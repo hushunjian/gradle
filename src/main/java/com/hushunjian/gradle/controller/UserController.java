@@ -47,4 +47,15 @@ public class UserController{
 		return userService.getAllUserTest(user1Request);
 	}
 	
+	@ApiOperation(value = "根据名字模糊查询用户信息(startingWith)", notes = "根据名字模糊查询用户信息",produces = MediaType.ALL_VALUE)
+	@GetMapping(value="/startingWith")
+	public List<User> StartingWith(){
+		return userService.startingWith();
+	}
+	
+	@ApiOperation(value = "根据名字模糊查询用户信息(startsWith)", notes = "根据名字模糊查询用户信息",produces = MediaType.ALL_VALUE)
+	@GetMapping(value="/startsWith")
+	public List<User> StartsWith(){
+		return userService.startsWith();
+	}
 }

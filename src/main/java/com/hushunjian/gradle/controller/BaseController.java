@@ -39,6 +39,13 @@ public class BaseController {
         response.put(BODY, body);
         return response;
     }
+    
+    public Object failure(Object body) {
+        Map<String, Object> response = new HashMap<String, Object>();
+        response.put(STATUS, 5000);
+        response.put(BODY, body);
+        return response;
+    }
 
     public Object success() {
         Map<String, Object> response = new HashMap<String, Object>();

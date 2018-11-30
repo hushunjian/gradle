@@ -138,4 +138,12 @@ public class UserService {
 		}
 		return users.get(0).getNumber();
 	}
+
+	public List<User> startingWith() {
+		return userRepo.findByUserNameStartingWith("张三");
+	}
+
+	public List<User> startsWith() {
+		return userRepo.findByUserNameStartsWith("张三");
+	}
 }

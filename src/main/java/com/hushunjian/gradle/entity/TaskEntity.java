@@ -41,5 +41,6 @@ public class TaskEntity implements Serializable {
 	@OneToMany(mappedBy = "task",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
 	private List<ProgressPlanTaskEntity> progressPlanTasks = new ArrayList<>();
 	
-	
+	@OneToMany(mappedBy = "planTask",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
+	private List<ImportantTaskEntity> importantTasks = new ArrayList<>();
 }

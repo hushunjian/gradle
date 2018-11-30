@@ -23,4 +23,8 @@ public interface UserRepo extends JpaRepository<User, Long> {
 
 	Object deleteByUserName(String userName);
 	
+	
+	List<User> findByUserNameStartingWith(String name);
+	
+	List<User> findByUserNameStartsWith(String name);
 }
