@@ -44,6 +44,7 @@ public class ImportantTaskService {
 	public ImportantTaskV2Entity addImportantTaskGroup(String importantTaskGroupName) {
 		ImportantTaskV2Entity importantTaskV2 = new ImportantTaskV2Entity();
 		importantTaskV2.setImportantTaskName(importantTaskGroupName);
+		importantTaskV2Repo.save(importantTaskV2);
 		return importantTaskV2;
 	}
 	

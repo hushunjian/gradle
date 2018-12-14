@@ -30,7 +30,9 @@ public class OperatorDTO implements Serializable {
 	private String updatedBy;  
 	
 	@ExcelTitle("修改时间")
-	private String updatedTime;  
+	private String updatedTime; 
+
+	private Integer num;
 	
 	private int status;
 }

@@ -61,5 +61,4 @@ public class ImportantTaskV2Entity {
 	 */
 	@OneToMany(mappedBy = "group", fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
 	private List<ImportantTaskV2Entity> members = new ArrayList<>();
-
 }
