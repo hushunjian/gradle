@@ -14,7 +14,7 @@ public class MyWebAppConfigurer extends WebMvcConfigurerAdapter {
     
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        //registry.addInterceptor(getMyInterceptor()).addPathPatterns("/hello/sayHello");
+        registry.addInterceptor(getMyInterceptor()).addPathPatterns("/**");
         super.addInterceptors(registry);
     }
 }

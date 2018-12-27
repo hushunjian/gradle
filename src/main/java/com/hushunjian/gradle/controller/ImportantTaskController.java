@@ -16,9 +16,9 @@ import com.hushunjian.gradle.entity.ImportantTaskV2Entity;
 import com.hushunjian.gradle.entity.TaskV2Entity;
 import com.hushunjian.gradle.request.UpdateImportantTaskRequest;
 import com.hushunjian.gradle.service.ImportantTaskService;
-import com.wordnik.swagger.annotations.ApiOperation;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @RestController("ImportantTaskController")
 @RequestMapping(value = "/importantTask")
