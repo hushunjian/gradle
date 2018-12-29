@@ -1,5 +1,6 @@
 package com.hushunjian.gradle.entity;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +49,12 @@ public class ImportantTaskV2Entity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "task_id")
 	private TaskV2Entity taskV2;
+	
+	/**
+	 * 开始时间
+	 */
+    @Column(name = "start_date", columnDefinition = "datetime comment '开始时间'")
+    private ZonedDateTime startDate;
 	
 	/**
 	 * 组成员所属的重点任务组id
