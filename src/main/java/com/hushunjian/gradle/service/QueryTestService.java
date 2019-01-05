@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,6 +14,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
@@ -20,6 +22,9 @@ import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +61,7 @@ public class QueryTestService {
 		criteria.put(groupId, conditionValueToMap("eq", 1));
 		criteria.put(taskId, conditionValueToMap("eq", 1));
 		criteria.put(taskName, conditionValueToMap("eq", "构件组1"));
+		criteria.put(id, conditionValueToMap("in",Arrays.asList(1L,2L)));
 		/**
 		 * 筛选符合实体的查询条件
 		 */
@@ -72,6 +78,15 @@ public class QueryTestService {
 			return predicate;
 		});
 		
+		Pageable pageable = new PageRequest(0,10);
+		
+		Page<ImportantTaskV2Entity> findAll2 = importantTaskV2Repo.findAll((root, query, cb) -> {
+			Predicate predicate = cb.conjunction();
+			List<Expression<Boolean>> expressions = predicate.getExpressions();
+			expressions.addAll(appendCriteria(result, cb, root));
+			return predicate;
+		},pageable);
+		
 		/**
 		 * 输出结果
 		 */
@@ -83,7 +98,7 @@ public class QueryTestService {
 			System.out.println("==========");
 		});
 		
-		List<ImportantTaskV2Entity> findAll1 = test(importantTaskV2Repo,result);
+		List<ImportantTaskV2Entity> findAll1 = findAll(importantTaskV2Repo,result);
 		/**
 		 * 输出结果
 		 */
@@ -103,7 +118,7 @@ public class QueryTestService {
 	 * @param result
 	 * @return
 	 */
-	private <T extends JpaSpecificationExecutor<?>> List test(T repo,Map<String, Map<String, Object>> result){
+	private <T extends JpaSpecificationExecutor<?>> List findAll(T repo,Map<String, Map<String, Object>> result){
 		  return repo.findAll((root, query, cb) -> {
 				Predicate predicate = cb.conjunction();
 				List<Expression<Boolean>> expressions = predicate.getExpressions();
@@ -111,6 +126,7 @@ public class QueryTestService {
 				return predicate;
 			});
 		}
+	
 
 	/**
 	 * 将查询条件和值组装成map
@@ -185,6 +201,14 @@ public class QueryTestService {
 			} else if (value instanceof LocalDate) {
 				predicate = cb.lessThanOrEqualTo(root.get(propertyName), (LocalDate) value);
 			}
+		case "in":
+			In<Object> in = cb.in(root.get(propertyName));
+			if (value instanceof List) {
+				List<Object> objs = (List)value;
+				objs.forEach(obj -> in.value(obj));
+			}
+			predicate = in;
+			break;
 		default:
 			break;
 		}
