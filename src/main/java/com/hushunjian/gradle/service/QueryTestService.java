@@ -4,7 +4,6 @@ import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -31,6 +30,7 @@ import org.springframework.stereotype.Service;
 import com.hushunjian.gradle.entity.ImportantTaskV2Entity;
 import com.hushunjian.gradle.enumeration.CriteriaEnum;
 import com.hushunjian.gradle.repo.ImportantTaskV2Repo;
+import com.hushunjian.gradle.repo.TaskV2Repo;
 import com.hushunjian.gradle.util.DynamicUtil;
 
 @Service
@@ -54,7 +54,7 @@ public class QueryTestService {
 
 	@Autowired
 	private ImportantTaskV2Repo importantTaskV2Repo;
-
+	
 	public void test() {
 		/**
 		 * 传入的查询条件
@@ -285,8 +285,8 @@ public class QueryTestService {
 			clazz.getDeclaredField(foreignKey);
 			return;
 		}
-		String substring = foreignKey.substring(0, foreignKey.indexOf("."));
-		Field field = clazz.getDeclaredField(substring);
+		String fieldName = foreignKey.substring(0, foreignKey.indexOf("."));
+		Field field = clazz.getDeclaredField(fieldName);
 		Class<?> type = field.getType();
 		foreignKey = foreignKey.substring(foreignKey.indexOf(".") + 1, foreignKey.length());
 		filterForeignKey(foreignKey, type);
@@ -304,5 +304,30 @@ public class QueryTestService {
 			System.out.println("startDate:" + importantTask.getStartDate());
 			System.out.println("==========");
 		});
+	}
+
+	public List<Long> test2(Integer pageNo, Integer pageSize) {
+		Map<String, Map<CriteriaEnum, Object>> conditons = new HashMap<>();
+		conditons.put(id, conditionValueToMap(CriteriaEnum.notEq, 1));
+		conditons.put(taskStartDate, conditionValueToMap(CriteriaEnum.le, ZonedDateTime.now()));
+		
+		if (pageNo <= 0) {
+			pageNo = 1;
+		}
+		if (pageSize <= 0) {
+			pageSize = 10;
+		}
+		Pageable pageable = new PageRequest(pageNo - 1, pageSize);
+		Page<ImportantTaskV2Entity> importantTasks = DynamicUtil.findAll(importantTaskV2Repo, conditons, ImportantTaskV2Entity.class, pageable);
+		List<Long> ids = new ArrayList<>();
+		importantTasks.forEach(importantTask -> {
+			ids.add(importantTask.getId());
+			System.out.println("==========");
+			System.out.println("id:" + importantTask.getId());
+			System.out.println("importantTaskName:" + importantTask.getImportantTaskName());
+			System.out.println("startDate:" + importantTask.getStartDate());
+			System.out.println("==========");
+		});
+		return ids;
 	}
 }

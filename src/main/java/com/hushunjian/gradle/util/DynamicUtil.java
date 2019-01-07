@@ -126,8 +126,8 @@ public class DynamicUtil {
 			clazz.getDeclaredField(foreignKey);
 			return;
 		}
-		String substring = foreignKey.substring(0, foreignKey.indexOf("."));
-		Field field = clazz.getDeclaredField(substring);
+		String fieldName = foreignKey.substring(0, foreignKey.indexOf("."));
+		Field field = clazz.getDeclaredField(fieldName);
 		Class<?> type = field.getType();
 		foreignKey = foreignKey.substring(foreignKey.indexOf(".") + 1, foreignKey.length());
 		filterForeignKey(foreignKey, type);

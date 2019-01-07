@@ -1,9 +1,12 @@
 package com.hushunjian.gradle.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hushunjian.gradle.service.QueryTestService;
@@ -31,5 +34,13 @@ public class QueryTestController extends BaseController  {
 	public Object test1(){
 		queryTestService.test1();
 		return success();
+	}
+	
+	@ApiOperation("测试动态查询")
+	@GetMapping(value = "test2")
+	public Object test2(@RequestParam Integer pageNo,
+						@RequestParam Integer pageSize){
+		List<Long> ids = queryTestService.test2(pageNo,pageSize);
+		return success(ids);
 	}
 }
