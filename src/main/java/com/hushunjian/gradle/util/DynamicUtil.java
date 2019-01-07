@@ -43,7 +43,7 @@ public class DynamicUtil {
 		return repo.findAll((root, query, cb) -> {
 			Predicate predicate = cb.conjunction();
 			List<Expression<Boolean>> expressions = predicate.getExpressions();
-			expressions.addAll(appendCondition(conditions, cb, root));
+			expressions.addAll(appendExpressions(conditions, cb, root));
 			return predicate;
 		});
 	}
@@ -62,7 +62,7 @@ public class DynamicUtil {
 		return repo.findAll((root, query, cb) -> {
 			Predicate predicate = cb.conjunction();
 			List<Expression<Boolean>> expressions = predicate.getExpressions();
-			expressions.addAll(appendCondition(conditions, cb, root));
+			expressions.addAll(appendExpressions(conditions, cb, root));
 			return predicate;
 		}, pageable);
 	}
@@ -141,12 +141,15 @@ public class DynamicUtil {
 	 * @param root
 	 * @return
 	 */
-	private static List<Expression<Boolean>> appendCondition(Map<String, Map<CriteriaEnum, Object>> conditions, CriteriaBuilder cb, Root<?> root) {
+	private static List<Expression<Boolean>> appendExpressions(Map<String, Map<CriteriaEnum, Object>> conditions, CriteriaBuilder cb, Root<?> root) {
 		List<Expression<Boolean>> expressions = new ArrayList<>();
 		conditions.forEach((propertyName, values) -> {
 			values.forEach((condition, value) -> {
 				if (value != null) {
-					expressions.add(appendExpression(propertyName, condition, value, cb, root));
+					Predicate expression = appendExpression(propertyName, condition, value, cb, root);
+					if (expression != null) {
+						expressions.add(expression);
+					}
 				}
 			});
 		});
@@ -188,6 +191,8 @@ public class DynamicUtil {
 				predicate = cb.lessThanOrEqualTo((Path<ZonedDateTime>) path, (ZonedDateTime) value);
 			} else if (value instanceof LocalDate) {
 				predicate = cb.lessThanOrEqualTo((Path<LocalDate>) path, (LocalDate) value);
+			} else{
+				predicate = null;
 			}
 			break;
 		case ge:
@@ -199,6 +204,8 @@ public class DynamicUtil {
 				predicate = cb.greaterThanOrEqualTo((Path<ZonedDateTime>) path, (ZonedDateTime) value);
 			} else if (value instanceof LocalDate) {
 				predicate = cb.greaterThanOrEqualTo((Path<LocalDate>) path, (LocalDate) value);
+			} else{
+				predicate = null;
 			}
 			break;
 		case in:
@@ -206,8 +213,10 @@ public class DynamicUtil {
 			if (value instanceof List) {
 				List<Object> objs = (List) value;
 				objs.forEach(obj -> in.value(obj));
+				predicate = in;
+			}else{
+				predicate = null;
 			}
-			predicate = in;
 			break;
 		default:
 			break;

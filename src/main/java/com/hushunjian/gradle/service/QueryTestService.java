@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -309,7 +310,8 @@ public class QueryTestService {
 	public List<Long> test2(Integer pageNo, Integer pageSize) {
 		Map<String, Map<CriteriaEnum, Object>> conditons = new HashMap<>();
 		conditons.put(id, conditionValueToMap(CriteriaEnum.notEq, 1));
-		conditons.put(taskStartDate, conditionValueToMap(CriteriaEnum.le, ZonedDateTime.now()));
+//		conditons.put(taskStartDate, conditionValueToMap(CriteriaEnum.le, ZonedDateTime.now()));
+//		conditons.put(taskId, conditionValueToMap(CriteriaEnum.in, 1));
 		
 		if (pageNo <= 0) {
 			pageNo = 1;
