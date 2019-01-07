@@ -25,4 +25,11 @@ public class QueryTestController extends BaseController  {
 		queryTestService.test();
 		return success();
 	}
+	
+	@ApiOperation("测试动态查询")
+	@GetMapping(value = "test1")
+	public Object test1(){
+		queryTestService.test1();
+		return success();
+	}
 }

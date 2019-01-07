@@ -29,10 +29,13 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Service;
 
 import com.hushunjian.gradle.entity.ImportantTaskV2Entity;
+import com.hushunjian.gradle.enumeration.CriteriaEnum;
 import com.hushunjian.gradle.repo.ImportantTaskV2Repo;
+import com.hushunjian.gradle.util.DynamicUtil;
 
 @Service
 @Transactional
+@SuppressWarnings("all")
 public class QueryTestService {
 
 	private final static String id = "id";
@@ -41,11 +44,13 @@ public class QueryTestService {
 
 	private final static String startDate = "startDate";
 
-	private final static String groupId = "group_id";
+	private final static String groupId = "group.id";
 
-	private final static String taskName = "taskV2_name";
+	private final static String taskName = "taskV2.name";
+	
+	private final static String taskStartDate = "taskV2.startDate";
 
-	private final static String taskId = "taskV2_id";
+	private final static String taskId = "taskV2.id";
 
 	@Autowired
 	private ImportantTaskV2Repo importantTaskV2Repo;
@@ -54,20 +59,21 @@ public class QueryTestService {
 		/**
 		 * 传入的查询条件
 		 */
-		Map<String, Map<String, Object>> criteria = new HashMap<>();
-		criteria.put(id, conditionValueToMap("notEq", 1));
-		criteria.put(importantTaskName, conditionValueToMap("eq", "构件组1"));
-		criteria.put(startDate, conditionValueToMap("le", ZonedDateTime.now()));
-		criteria.put(groupId, conditionValueToMap("eq", 1));
-		criteria.put(taskId, conditionValueToMap("eq", 1));
-		criteria.put(taskName, conditionValueToMap("eq", "构件组1"));
-		criteria.put(id, conditionValueToMap("in",Arrays.asList(1L,2L)));
+		Map<String, Map<CriteriaEnum, Object>> criteria = new HashMap<>();
+//		criteria.put(id, conditionValueToMap(CriteriaEnum.eq, 1));
+//		criteria.put(importantTaskName, conditionValueToMap(CriteriaEnum.notEq, "构件组1"));
+//		criteria.put(startDate, conditionValueToMap(CriteriaEnum.le, ZonedDateTime.now()));
+//		criteria.put(groupId, conditionValueToMap(CriteriaEnum.eq, 1));
+//		criteria.put(taskId, conditionValueToMap(CriteriaEnum.eq, 1));
+//		criteria.put(taskName, conditionValueToMap(CriteriaEnum.eq, "构件组1"));
+//		criteria.put(id, conditionValueToMap(CriteriaEnum.in, Arrays.asList(1L, 2L)));
+		criteria.put(taskStartDate, conditionValueToMap(CriteriaEnum.le, ZonedDateTime.now()));
 		/**
 		 * 筛选符合实体的查询条件
 		 */
-		final Map<String, Map<String, Object>> result = new HashMap<>();
+		final Map<String, Map<CriteriaEnum, Object>> result = new HashMap<>();
 		result.putAll(filter(criteria, ImportantTaskV2Entity.class));
-		
+
 		/**
 		 * 动态查询
 		 */
@@ -77,16 +83,16 @@ public class QueryTestService {
 			expressions.addAll(appendCriteria(result, cb, root));
 			return predicate;
 		});
-		
-		Pageable pageable = new PageRequest(0,10);
-		
+
+		Pageable pageable = new PageRequest(0, 10);
+
 		Page<ImportantTaskV2Entity> findAll2 = importantTaskV2Repo.findAll((root, query, cb) -> {
 			Predicate predicate = cb.conjunction();
 			List<Expression<Boolean>> expressions = predicate.getExpressions();
 			expressions.addAll(appendCriteria(result, cb, root));
 			return predicate;
-		},pageable);
-		
+		}, pageable);
+
 		/**
 		 * 输出结果
 		 */
@@ -97,8 +103,8 @@ public class QueryTestService {
 			System.out.println("startDate:" + importantTask.getStartDate());
 			System.out.println("==========");
 		});
-		
-		List<ImportantTaskV2Entity> findAll1 = findAll(importantTaskV2Repo,result);
+
+		List<ImportantTaskV2Entity> findAll1 = findAll(importantTaskV2Repo, result);
 		/**
 		 * 输出结果
 		 */
@@ -110,7 +116,7 @@ public class QueryTestService {
 			System.out.println("==========");
 		});
 	}
-	
+
 	/**
 	 * 封装查询
 	 * 
@@ -118,24 +124,24 @@ public class QueryTestService {
 	 * @param result
 	 * @return
 	 */
-	private <T extends JpaSpecificationExecutor<?>> List findAll(T repo,Map<String, Map<String, Object>> result){
-		  return repo.findAll((root, query, cb) -> {
-				Predicate predicate = cb.conjunction();
-				List<Expression<Boolean>> expressions = predicate.getExpressions();
-				expressions.addAll(appendCriteria(result, cb, root));
-				return predicate;
-			});
-		}
-	
+	private <T extends JpaSpecificationExecutor<?>> List findAll(T repo, Map<String, Map<CriteriaEnum, Object>> result) {
+		return repo.findAll((root, query, cb) -> {
+			Predicate predicate = cb.conjunction();
+			List<Expression<Boolean>> expressions = predicate.getExpressions();
+			expressions.addAll(appendCriteria(result, cb, root));
+			return predicate;
+		});
+	}
 
 	/**
 	 * 将查询条件和值组装成map
+	 * 
 	 * @param condition
 	 * @param value
 	 * @return
 	 */
-	private Map<String, Object> conditionValueToMap(String condition, Object value) {
-		Map<String, Object> map = new HashMap<>();
+	private Map<CriteriaEnum, Object> conditionValueToMap(CriteriaEnum condition, Object value) {
+		Map<CriteriaEnum, Object> map = new HashMap<>();
 		map.put(condition, value);
 		return map;
 	}
@@ -148,7 +154,7 @@ public class QueryTestService {
 	 * @param root
 	 * @return
 	 */
-	private List<Expression<Boolean>> appendCriteria(Map<String, Map<String, Object>> criterias, CriteriaBuilder cb, Root<?> root) {
+	private List<Expression<Boolean>> appendCriteria(Map<String, Map<CriteriaEnum, Object>> criterias, CriteriaBuilder cb, Root<?> root) {
 		List<Expression<Boolean>> expressions = new ArrayList<>();
 		criterias.forEach((propertyName, values) -> {
 			values.forEach((criteria, value) -> {
@@ -161,6 +167,27 @@ public class QueryTestService {
 	}
 
 	/**
+	 * 获取条件
+	 * 
+	 * @param propertyName
+	 * @param root
+	 * @return
+	 */
+	private Path<Object> appendPath(String propertyName, Root<?> root) {
+		Path<Object> path = null;
+		if (propertyName.contains(".")) {
+			String[] split = propertyName.split("\\.");
+			path = root.get(split[0]);
+			for (int i = 1; i < split.length; i++) {
+				path = path.get(split[i]);
+			}
+		} else {
+			path = root.get(propertyName);
+		}
+		return path;
+	}
+
+	/**
 	 * 针对每一个属性拼接条件
 	 * 
 	 * @param propertyName
@@ -170,41 +197,37 @@ public class QueryTestService {
 	 * @param root
 	 * @return
 	 */
-	private Predicate appendCriteriaValue(String propertyName, String criteria, Object value, CriteriaBuilder cb, Root<?> root) {
+	private Predicate appendCriteriaValue(String propertyName, CriteriaEnum criteria, Object value, CriteriaBuilder cb, Root<?> root) {
 		Predicate predicate = null;
+		Path<?> path = appendPath(propertyName, root);
+		if (path == null) {
+			return predicate;
+		}
 		switch (criteria) {
-		case "eq":
-			if (propertyName.contains("_")) {
-				String[] split = propertyName.split("_");
-				Path<Object> path = root.get(split[0]);
-				for (int i = 1; i < split.length; i++) {
-					path = path.get(split[i]);
-				}
-				predicate = cb.equal(path, value);
-			} else {
-				predicate = cb.equal(root.get(propertyName), value);
-			}
+		case eq:
+			predicate = cb.equal(path, value);
 			break;
-		case "notEq":
-			predicate = cb.notEqual(root.get(propertyName), value);
+		case notEq:
+			predicate = cb.notEqual(path, value);
 			break;
-		case "isNull":
-			predicate = cb.isNull(root.get(propertyName));
+		case isNull:
+			predicate = cb.isNull(path);
 			break;
-		case "le":
+		case le:
 			if (value instanceof Number) {
-				predicate = cb.le(root.get(propertyName), (Number) value);
+				predicate = cb.le((Path<Number>) path, (Number) value);
 			} else if (value instanceof Date) {
-				predicate = cb.lessThanOrEqualTo(root.get(propertyName), (Date) value);
+				predicate = cb.lessThanOrEqualTo((Path<Date>) path, (Date) value);
 			} else if (value instanceof ZonedDateTime) {
-				predicate = cb.lessThanOrEqualTo(root.get(propertyName), (ZonedDateTime) value);
+				predicate = cb.lessThanOrEqualTo((Path<ZonedDateTime>) path, (ZonedDateTime) value);
 			} else if (value instanceof LocalDate) {
-				predicate = cb.lessThanOrEqualTo(root.get(propertyName), (LocalDate) value);
+				predicate = cb.lessThanOrEqualTo((Path<LocalDate>) path, (LocalDate) value);
 			}
-		case "in":
-			In<Object> in = cb.in(root.get(propertyName));
+			break;
+		case in:
+			In<Object> in = cb.in(path);
 			if (value instanceof List) {
-				List<Object> objs = (List)value;
+				List<Object> objs = (List) value;
 				objs.forEach(obj -> in.value(obj));
 			}
 			predicate = in;
@@ -222,21 +245,21 @@ public class QueryTestService {
 	 * @param clazz
 	 * @return
 	 */
-	private Map<String, Map<String, Object>> filter(Map<String, Map<String, Object>> criteria, Class<?> clazz) {
+	private Map<String, Map<CriteriaEnum, Object>> filter(Map<String, Map<CriteriaEnum, Object>> criteria, Class<?> clazz) {
 		Field[] fields = clazz.getDeclaredFields();
 		List<String> fieldNames = new ArrayList<>();
 		for (Field field : fields) {
 			fieldNames.add(field.getName());
 		}
 		// 筛选出符合属性的查询条件
-		Set<Entry<String, Map<String, Object>>> entrySet = criteria.entrySet();
-		Iterator<Entry<String, Map<String, Object>>> iterator = entrySet.iterator();
+		Set<Entry<String, Map<CriteriaEnum, Object>>> entrySet = criteria.entrySet();
+		Iterator<Entry<String, Map<CriteriaEnum, Object>>> iterator = entrySet.iterator();
 		while (iterator.hasNext()) {
-			Entry<String, Map<String, Object>> next = iterator.next();
-			if (next.getKey().contains("_")) {
+			Entry<String, Map<CriteriaEnum, Object>> next = iterator.next();
+			if (next.getKey().contains(".")) {
 				// 外键
 				try {
-					d(next.getKey(), clazz);
+					filterForeignKey(next.getKey(), clazz);
 				} catch (Exception e) {
 					iterator.remove();
 				}
@@ -256,16 +279,30 @@ public class QueryTestService {
 	 * @param clazz
 	 * @throws NoSuchFieldException
 	 */
-	private void d(String foreignKey, Class<?> clazz) throws NoSuchFieldException {
-		if (!foreignKey.contains("_")) {
-			// 已经不包含下划线了说明是最后的条件属性,判断实体中是否存在该字段
+	private void filterForeignKey(String foreignKey, Class<?> clazz) throws NoSuchFieldException {
+		if (!foreignKey.contains(".")) {
+			// 已经不包含"."说明是最后的条件属性,判断实体中是否存在该字段
 			clazz.getDeclaredField(foreignKey);
 			return;
 		}
-		String substring = foreignKey.substring(0, foreignKey.indexOf("_"));
+		String substring = foreignKey.substring(0, foreignKey.indexOf("."));
 		Field field = clazz.getDeclaredField(substring);
 		Class<?> type = field.getType();
-		foreignKey = foreignKey.substring(foreignKey.indexOf("_") + 1, foreignKey.length());
-		d(foreignKey, type);
+		foreignKey = foreignKey.substring(foreignKey.indexOf(".") + 1, foreignKey.length());
+		filterForeignKey(foreignKey, type);
+	}
+
+	public void test1() {
+		Map<String, Map<CriteriaEnum, Object>> allConditon = new HashMap<>();
+		allConditon.put(taskStartDate, conditionValueToMap(CriteriaEnum.ge, ZonedDateTime.now()));
+		
+		List<ImportantTaskV2Entity> importantTasks = DynamicUtil.findAll(importantTaskV2Repo, allConditon, ImportantTaskV2Entity.class);
+		importantTasks.forEach(importantTask -> {
+			System.out.println("==========");
+			System.out.println("id:" + importantTask.getId());
+			System.out.println("importantTaskName:" + importantTask.getImportantTaskName());
+			System.out.println("startDate:" + importantTask.getStartDate());
+			System.out.println("==========");
+		});
 	}
 }

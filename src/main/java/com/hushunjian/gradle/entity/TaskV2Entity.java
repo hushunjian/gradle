@@ -1,5 +1,6 @@
 package com.hushunjian.gradle.entity;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +38,12 @@ public class TaskV2Entity {
 	 */
 	@Column(name = "task_name", nullable = false)
 	private String taskName;
+	
+	/**
+	 * 开始时间
+	 */
+    @Column(name = "start_date", columnDefinition = "datetime comment '开始时间'")
+    private ZonedDateTime startDate;
 	
 	/**
 	 * 对应的重点任务数据
