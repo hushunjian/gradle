@@ -1,6 +1,8 @@
 package com.hushunjian.gradle.controller;
 
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -46,7 +48,8 @@ public class ImportantTaskController extends BaseController {
 	@GetMapping(value = "getAllTaskV2")
 	public Object getAllTaskV2(){
 		List<TaskV2Entity> taskV2s = importantTaskService.getAllTaskV2();
-		return success(taskV2s);
+		List<Long> ids = taskV2s.stream().map(TaskV2Entity::getId).collect(Collectors.toList());
+		return success(ids);
 	}
 	
 	@ApiOperation(value = "获取所有的重点任务组")

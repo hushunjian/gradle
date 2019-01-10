@@ -28,7 +28,31 @@ import com.hushunjian.gradle.enumeration.CriteriaEnum;
 
 @SuppressWarnings("all")
 public class DynamicUtil {
+	
+	public static Map<String, Map<CriteriaEnum, Object>> eq(String propertyName, Object value){
+		return appendCriteriaValue(propertyName, CriteriaEnum.eq, value);
+	}
+	
+	public static Map<String, Map<CriteriaEnum, Object>> isNull(String propertyName){
+		return appendCriteriaValue(propertyName, CriteriaEnum.isNull, null);
+	}
+	
+	public static Map<String, Map<CriteriaEnum, Object>> le(String propertyName, Object value){
+		return appendCriteriaValue(propertyName, CriteriaEnum.le, value);
+	}
+	
+	public static Map<String, Map<CriteriaEnum, Object>> in(String propertyName, List<Object> value){
+		return appendCriteriaValue(propertyName, CriteriaEnum.in, value);
+	}
 
+	private static Map<String, Map<CriteriaEnum, Object>> appendCriteriaValue(String propertyName, CriteriaEnum criteria, Object value){
+		Map<String, Map<CriteriaEnum, Object>> condition = new HashMap<>();
+		Map<CriteriaEnum, Object> criteriaValue = new HashMap<>();
+		criteriaValue.put(criteria, value);
+		condition.put(propertyName, criteriaValue);
+		return condition;
+	}
+	
 	/**
 	 * findAll
 	 * 
@@ -136,17 +160,17 @@ public class DynamicUtil {
 	/**
 	 * 拼接条件
 	 * 
-	 * @param conditions
+	 * @param criterias
 	 * @param cb
 	 * @param root
 	 * @return
 	 */
-	private static List<Expression<Boolean>> appendExpressions(Map<String, Map<CriteriaEnum, Object>> conditions, CriteriaBuilder cb, Root<?> root) {
+	private static List<Expression<Boolean>> appendExpressions(Map<String, Map<CriteriaEnum, Object>> criterias, CriteriaBuilder cb, Root<?> root) {
 		List<Expression<Boolean>> expressions = new ArrayList<>();
-		conditions.forEach((propertyName, values) -> {
-			values.forEach((condition, value) -> {
-				if (value != null) {
-					Predicate expression = appendExpression(propertyName, condition, value, cb, root);
+		criterias.forEach((propertyName, values) -> {
+			values.forEach((criteria, value) -> {
+				if (value != null || CriteriaEnum.isNull.equals(criteria)) {
+					Predicate expression = appendExpression(propertyName, criteria, value, cb, root);
 					if (expression != null) {
 						expressions.add(expression);
 					}
@@ -209,13 +233,33 @@ public class DynamicUtil {
 			}
 			break;
 		case in:
-			In<Object> in = cb.in(path);
 			if (value instanceof List) {
+				In<Object> in = cb.in(path);
 				List<Object> objs = (List) value;
 				objs.forEach(obj -> in.value(obj));
 				predicate = in;
 			}else{
 				predicate = null;
+			}
+			break;
+		case between:
+			if (value instanceof List) {
+				List<Object> objs = (List)value;
+				if (objs.size() == 2) {
+					if (objs.get(0) instanceof ZonedDateTime && objs.get(1) instanceof ZonedDateTime) {
+						predicate = cb.between((Path<ZonedDateTime>)path, (ZonedDateTime)objs.get(0), (ZonedDateTime)objs.get(1));
+					}else if(objs.get(0) instanceof Date && objs.get(1) instanceof Date){
+						predicate = cb.between((Path<Date>)path, (Date)objs.get(0), (Date)objs.get(1));
+					}else if(objs.get(0) instanceof LocalDate && objs.get(1) instanceof LocalDate){
+						predicate = cb.between((Path<LocalDate>)path, (LocalDate)objs.get(0), (LocalDate)objs.get(1));
+					}else if(objs.get(0) instanceof Long && objs.get(1) instanceof Long){
+						predicate = cb.between((Path<Long>)path, (Long)objs.get(0), (Long)objs.get(1));
+					}else if(objs.get(0) instanceof Integer && objs.get(1) instanceof Integer){
+						predicate = cb.between((Path<Integer>)path, (Integer)objs.get(0), (Integer)objs.get(1));
+					}else{
+						predicate = null;
+					}
+				}
 			}
 			break;
 		default:

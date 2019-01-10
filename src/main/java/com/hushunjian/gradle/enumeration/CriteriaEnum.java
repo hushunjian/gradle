@@ -12,5 +12,6 @@ public enum CriteriaEnum {
 	isNull,
 	in,
 	ge,
+	between,
 	le;
 }

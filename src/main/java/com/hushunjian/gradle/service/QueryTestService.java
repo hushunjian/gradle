@@ -309,9 +309,10 @@ public class QueryTestService {
 
 	public List<Long> test2(Integer pageNo, Integer pageSize) {
 		Map<String, Map<CriteriaEnum, Object>> conditons = new HashMap<>();
-		conditons.put(id, conditionValueToMap(CriteriaEnum.notEq, 1));
-//		conditons.put(taskStartDate, conditionValueToMap(CriteriaEnum.le, ZonedDateTime.now()));
-//		conditons.put(taskId, conditionValueToMap(CriteriaEnum.in, 1));
+//		conditons.putAll(DynamicUtil.eq(id, 1));
+//		conditons.putAll(DynamicUtil.le(taskStartDate, ZonedDateTime.now()));
+//		conditons.putAll(DynamicUtil.in(id, Arrays.asList(1,2,3)));
+		conditons.putAll(DynamicUtil.isNull(groupId));
 		
 		if (pageNo <= 0) {
 			pageNo = 1;
