@@ -4,7 +4,6 @@ import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -30,8 +29,9 @@ import org.springframework.stereotype.Service;
 
 import com.hushunjian.gradle.entity.ImportantTaskV2Entity;
 import com.hushunjian.gradle.enumeration.CriteriaEnum;
+import com.hushunjian.gradle.enumeration.CriteriaType;
 import com.hushunjian.gradle.repo.ImportantTaskV2Repo;
-import com.hushunjian.gradle.repo.TaskV2Repo;
+import com.hushunjian.gradle.util.CriteriaValue;
 import com.hushunjian.gradle.util.DynamicUtil;
 
 @Service
@@ -332,5 +332,35 @@ public class QueryTestService {
 			System.out.println("==========");
 		});
 		return ids;
+	}
+
+	public void test3() {
+		List<CriteriaValue> criterias = new ArrayList<>();
+		criterias.add(new CriteriaValue(id, 1, CriteriaEnum.eq, CriteriaType.and));
+		criterias.add(new CriteriaValue(id, 2, CriteriaEnum.eq, CriteriaType.or));
+		
+		List<ImportantTaskV2Entity> importantTasks = DynamicUtil.findAll(importantTaskV2Repo, criterias, ImportantTaskV2Entity.class);
+		importantTasks.forEach(importantTask -> {
+			System.out.println("==========");
+			System.out.println("id:" + importantTask.getId());
+			System.out.println("importantTaskName:" + importantTask.getImportantTaskName());
+			System.out.println("startDate:" + importantTask.getStartDate());
+			System.out.println("==========");
+		});
+	}
+
+	public void test4() {
+		List<ImportantTaskV2Entity> importantTasks = importantTaskV2Repo.findAll((root, query, cb)->{
+			Predicate p1 = cb.equal(root.get("id"), 1);
+			Predicate p2 = cb.or(cb.equal(root.get("id"), 2));
+			return query.where(p1, p2).getRestriction();
+		});
+		importantTasks.forEach(importantTask -> {
+			System.out.println("==========");
+			System.out.println("id:" + importantTask.getId());
+			System.out.println("importantTaskName:" + importantTask.getImportantTaskName());
+			System.out.println("startDate:" + importantTask.getStartDate());
+			System.out.println("==========");
+		});
 	}
 }

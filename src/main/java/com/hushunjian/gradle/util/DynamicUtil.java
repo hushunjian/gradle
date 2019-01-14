@@ -25,6 +25,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import com.hushunjian.gradle.entity.ImportantTaskV2Entity;
 import com.hushunjian.gradle.enumeration.CriteriaEnum;
+import com.hushunjian.gradle.enumeration.CriteriaType;
 
 @SuppressWarnings("all")
 public class DynamicUtil {
@@ -181,7 +182,7 @@ public class DynamicUtil {
 	}
 	
 	/**
-	 * 针对每一个属性拼接条件
+	 * 拼接条件
 	 * 
 	 * @param propertyName
 	 * @param criteria
@@ -190,7 +191,7 @@ public class DynamicUtil {
 	 * @param root
 	 * @return
 	 */
-	private static Predicate appendExpression(String propertyName, CriteriaEnum criteria, Object value, CriteriaBuilder cb, Root<?> root) {
+	private static Predicate appendPredicate(String propertyName, CriteriaEnum criteria, Object value, CriteriaBuilder cb, Root<?> root){
 		Predicate predicate = null;
 		Path<?> path = appendPath(propertyName, root);
 		if (path == null) {
@@ -268,6 +269,45 @@ public class DynamicUtil {
 		return predicate;
 	}
 	
+	
+	/**
+	 * 针对每一个属性拼接条件
+	 * 
+	 * @param propertyName
+	 * @param criteria
+	 * @param value
+	 * @param cb
+	 * @param root
+	 * @return
+	 */
+	private static Predicate appendExpression(String propertyName, CriteriaEnum criteria, Object value, CriteriaBuilder cb, Root<?> root) {
+		return appendPredicate(propertyName, criteria, value, cb, root);
+	}
+	
+	/**
+	 * 拼接and/or
+	 * 
+	 * @param propertyName
+	 * @param criteria
+	 * @param value
+	 * @param cb
+	 * @param root
+	 * @param criteriaType
+	 * @return
+	 */
+	private static Predicate appendExpression(String propertyName, CriteriaEnum criteria, Object value, CriteriaBuilder cb, Root<?> root, CriteriaType criteriaType) {
+		Predicate predicate = appendPredicate(propertyName, criteria, value, cb, root);
+		switch(criteriaType){
+		    case or:
+		    	predicate = cb.or(predicate);
+		    	break;
+			default:
+				predicate = cb.and(predicate);
+				break;
+		}
+		return predicate;
+	}
+	
 	/**
 	 * 获取条件
 	 * 
@@ -287,5 +327,114 @@ public class DynamicUtil {
 			path = root.get(propertyName);
 		}
 		return path;
+	}
+	
+	
+	/**
+	 * =================================================================================
+	 */
+	
+	
+	
+	
+	/**
+	 * 拼接条件
+	 * 
+	 * @param criterias
+	 * @param cb
+	 * @param root
+	 * @return
+	 */
+	private static List<Expression<Boolean>> appendExpressions(List<CriteriaValue> criterias, CriteriaBuilder cb, Root<?> root) {
+		List<Expression<Boolean>> expressions = new ArrayList<>();
+		criterias.forEach(criteria ->{
+			if (criteria.getValue() != null || CriteriaEnum.isNull.equals(criteria.getCriteria())) {
+				Predicate expression = appendExpression(criteria.getPropertyName(), criteria.getCriteria(), criteria.getValue(), cb, root, criteria.getCriteriaType());
+				if (expression != null) {
+					expressions.add(expression);
+				}
+			}
+		});
+		return expressions;
+	}
+	
+	/**
+	 * 拼接单个条件
+	 * 
+	 * @param criteria
+	 * @param cb
+	 * @param root
+	 * @return
+	 */
+	private static Expression<Boolean> appendExpression(CriteriaValue criteria, CriteriaBuilder cb, Root<?> root) {
+		Predicate expression = null;	
+		if (criteria.getValue() != null || CriteriaEnum.isNull.equals(criteria.getCriteria())) {
+			expression = appendExpression(criteria.getPropertyName(), criteria.getCriteria(), criteria.getValue(), cb, root);
+		}
+		return expression;
+	}
+	
+	/**
+	 * findAll
+	 * 
+	 * @param repo
+	 * @param conditions
+	 * @return
+	 */
+	public static <T extends JpaSpecificationExecutor<?>> List findAll(T repo, List<CriteriaValue> allConditon, Class clazz) {
+		// 筛选查询条件
+		List<CriteriaValue> conditions = filterConditions(allConditon, clazz);
+		// 查询
+		return repo.findAll((root, query, cb) -> {
+			Predicate predicate = cb.conjunction();
+			List<Expression<Boolean>> expressions = predicate.getExpressions();
+			expressions.addAll(appendExpressions(conditions, cb, root));
+			return predicate;
+		});
+	}
+	
+	/**
+	 * 筛选符合条件的查询条件
+	 * @param allConditon
+	 * @param clazz
+	 * @return
+	 */
+	private static List<CriteriaValue> filterConditions(List<CriteriaValue> allConditon, Class clazz){
+		List<CriteriaValue> conditions = new ArrayList<>();
+		conditions.addAll(filterCondition(allConditon, clazz));
+		return conditions;
+	}
+	
+	/**
+	 * 筛选出符合当前实体的查询结果
+	 * 
+	 * @param conditions
+	 * @param clazz
+	 * @return
+	 */
+	private static List<CriteriaValue> filterCondition(List<CriteriaValue> conditions, Class<?> clazz) {
+		Field[] fields = clazz.getDeclaredFields();
+		List<String> fieldNames = new ArrayList<>();
+		for (Field field : fields) {
+			fieldNames.add(field.getName());
+		}
+		Iterator<CriteriaValue> iterator = conditions.iterator();
+		// 筛选出符合属性的查询条件
+		while (iterator.hasNext()) {
+			CriteriaValue next = iterator.next();
+			if (next.getPropertyName().contains(".")) {
+				// 外键
+				try {
+					filterForeignKey(next.getPropertyName(), clazz);
+				} catch (Exception e) {
+					iterator.remove();
+				}
+			}else{
+				if (!fieldNames.contains(next.getPropertyName())) {
+					iterator.remove();
+				}
+			}
+		}
+		return conditions;
 	}
 }

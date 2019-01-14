@@ -43,4 +43,18 @@ public class QueryTestController extends BaseController  {
 		List<Long> ids = queryTestService.test2(pageNo,pageSize);
 		return success(ids);
 	}
+	
+	@ApiOperation("测试动态查询")
+	@GetMapping(value = "test3")
+	public Object test3(){
+		queryTestService.test3();
+		return success();
+	}
+	
+	@ApiOperation("测试动态查询")
+	@GetMapping(value = "test4")
+	public Object test4(){
+		queryTestService.test4();
+		return success();
+	}
 }
