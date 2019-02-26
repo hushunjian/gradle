@@ -1,5 +1,6 @@
 package com.hushunjian.gradle.repo;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,5 +16,9 @@ public interface StringToIntegerRepo extends JpaRepository<TestStringToInteger, 
 	
 	@Query("select new com.hushunjian.gradle.dto.StringToIntegerDTO(sum(cast(t1.number as integer))) from TestStringToInteger t1")
 	StringToIntegerDTO test1();
+	
+	List<TestStringToInteger> findByIdIn(Long... ids);
 
+	List<TestStringToInteger> findByIdIn(Collection<Long> ids);
+	
 }

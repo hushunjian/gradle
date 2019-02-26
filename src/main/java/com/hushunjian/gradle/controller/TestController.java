@@ -85,4 +85,17 @@ public class TestController{
 	public Long testSave3(@RequestParam Long num){
 		return testService.testSave3(num);
 	}
+	
+	@ApiOperation(value = "testIdInByArray")
+	@GetMapping(value = "testIdInByArray")
+	public Integer testIdInByArray(){
+		return testService.testIdInByArray();
+	}
+	
+	@ApiOperation(value = "testIdInByList")
+	@GetMapping(value = "testIdInByList")
+	public Integer testIdInByList(){
+		return testService.testIdInByList();
+	}
+	
 }

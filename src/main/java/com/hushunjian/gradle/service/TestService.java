@@ -133,4 +133,18 @@ public class TestService {
 		System.out.println("共耗时[" + time +"]毫秒");
 		return time;
 	}
+
+	public Integer testIdInByArray() {
+		List<TestStringToInteger> findByIdIn = stringToIntegerRepo.findByIdIn(1L,2L,3L);
+		return findByIdIn.size();
+	}
+
+	public Integer testIdInByList() {
+		List<Long> ids = new ArrayList<>();
+		ids.add(1L);
+		ids.add(2L);
+		ids.add(3L);
+		List<TestStringToInteger> findByIdIn = stringToIntegerRepo.findByIdIn(ids);
+		return findByIdIn.size();
+	}
 }

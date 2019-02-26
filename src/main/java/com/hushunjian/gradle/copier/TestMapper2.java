@@ -7,6 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.factory.Mappers;
+import org.springframework.data.domain.Page;
 
 import com.hushunjian.gradle.dto.OperatorDTO;
 import com.hushunjian.gradle.entity.Operator;
@@ -35,4 +36,8 @@ public interface TestMapper2 {
     OperatorDTO asOperator(User user);
     
     List<OperatorDTO> asOperators(List<User> users);
+    
+    List<OperatorDTO> asOperators(Page<User> users);
+    
+
 }
