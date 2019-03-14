@@ -11,7 +11,6 @@ public class MyWebAppConfigurer extends WebMvcConfigurerAdapter {
     public HandlerInterceptor getMyInterceptor(){
         return new URLInterceptor();
     }
-    
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(getMyInterceptor()).addPathPatterns("/**");

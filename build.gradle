@@ -54,6 +54,10 @@ dependencies {
 	compile group: 'com.querydsl', name: 'querydsl-apt', version: '4.1.4'
 	compile('org.springframework.boot:spring-boot-starter-tomcat') 
 	compile("org.mapstruct:mapstruct-jdk8:${mapstructVersion}")
+	compile group: 'com.itextpdf', name: 'itextpdf', version: '5.5.13'
+	compile group: 'com.itextpdf', name: 'itext-asian', version: '5.2.0'
+	compile group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
+	compile group: 'org.xhtmlrenderer', name: 'core-renderer', version: 'R8'
     apt("org.mapstruct:mapstruct-processor:${mapstructVersion}")
     apt("org.projectlombok:lombok:${lombokVersion}")
     testCompile('org.jmockit:jmockit:1.20')

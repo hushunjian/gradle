@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.hushunjian.gradle.dto.StringToIntegerDTO;
 import com.hushunjian.gradle.entity.TestStringToInteger;
@@ -20,5 +21,8 @@ public interface StringToIntegerRepo extends JpaRepository<TestStringToInteger, 
 	List<TestStringToInteger> findByIdIn(Long... ids);
 
 	List<TestStringToInteger> findByIdIn(Collection<Long> ids);
+
+	@Query("select t1 from TestStringToInteger t1 where CONCAT(t1.id,'|',t1.number) in :strs")
+	List<TestStringToInteger> testListIn(@Param("strs") List<String> strs);
 	
 }

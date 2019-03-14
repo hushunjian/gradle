@@ -9,6 +9,10 @@ public class StringToIntegerDTO {
 	private int number;
 	
 	private Long sum;
+	
+	public StringToIntegerDTO(){
+		
+	}
 
 	public StringToIntegerDTO(Long id, int number) {
 		super();

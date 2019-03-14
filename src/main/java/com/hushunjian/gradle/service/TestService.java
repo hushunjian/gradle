@@ -11,9 +11,11 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hushunjian.gradle.copier.TestMapper2;
 import com.hushunjian.gradle.dto.StringToIntegerDTO;
 import com.hushunjian.gradle.entity.TestStringToInteger;
 import com.hushunjian.gradle.repo.StringToIntegerRepo;
+import com.hushunjian.gradle.request.TestListInRequest;
 
 @Service
 @Transactional
@@ -146,5 +148,45 @@ public class TestService {
 		ids.add(3L);
 		List<TestStringToInteger> findByIdIn = stringToIntegerRepo.findByIdIn(ids);
 		return findByIdIn.size();
+	}
+
+	public List<StringToIntegerDTO> findDTO() {
+		List<TestStringToInteger> findAll = stringToIntegerRepo.findAll();
+		return TestMapper2.INSTANCE.asStringToIntegerDTO(findAll);
+	}
+
+	public void testSaveAndEdit(StringToIntegerDTO stringToIntegerDTO) {
+		TestStringToInteger testStringToInteger = TestMapper2.INSTANCE.asTestStringToInteger(stringToIntegerDTO);
+		testStringToInteger.setNumber0("0");
+		testStringToInteger.setNumber1("0");
+		testStringToInteger.setNumber2("0");
+		testStringToInteger.setNumber3("0");
+		testStringToInteger.setNumber4("0");
+		testStringToInteger.setNumber5("0");
+		testStringToInteger.setNumber6("0");
+		testStringToInteger.setNumber7("0");
+		testStringToInteger.setNumber8("0");
+		testStringToInteger.setNumber9("0");
+		testStringToInteger.setNumber10("0");
+		testStringToInteger.setNumber11("0");
+		testStringToInteger.setNumber12("0");
+		testStringToInteger.setNumber13("0");
+		testStringToInteger.setNumber14("0");
+		testStringToInteger.setNumber15("0");
+		stringToIntegerRepo.save(testStringToInteger);
+	}
+
+	public void testDelete(List<Long> ids) {
+		List<TestStringToInteger> in = stringToIntegerRepo.findByIdIn(ids);
+		stringToIntegerRepo.delete(in);
+	}
+
+	public List<StringToIntegerDTO> testListIn(List<TestListInRequest> request) {
+		List<String> strs = new ArrayList<>();
+		request.forEach(re ->{
+			strs.add(String.format("%s|%s",re.getId(),re.getNumber()));
+		});
+		List<TestStringToInteger> in = stringToIntegerRepo.testListIn(strs);
+		return TestMapper2.INSTANCE.asStringToIntegerDTO(in);
 	}
 }

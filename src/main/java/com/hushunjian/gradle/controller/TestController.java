@@ -1,5 +1,7 @@
 package com.hushunjian.gradle.controller;
 
+import java.util.List;
+
 import javax.validation.constraints.Size;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hushunjian.gradle.dto.StringToIntegerDTO;
 import com.hushunjian.gradle.enumeration.YesOrNoEnum;
+import com.hushunjian.gradle.request.TestListEmptyRequest;
+import com.hushunjian.gradle.request.TestListInRequest;
 import com.hushunjian.gradle.service.TestService;
 
 import io.swagger.annotations.Api;
@@ -25,7 +30,7 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping(value = "/test")
 @SuppressWarnings("all")
 @Validated
-public class TestController{
+public class TestController extends BaseController{
 	@Autowired
 	private TestService testService;
 	
@@ -98,4 +103,33 @@ public class TestController{
 		return testService.testIdInByList();
 	}
 	
+	@ResponseBody
+	@PostMapping(value = "/testSaveAndEdit")
+	public void testSaveAndEdit(@Validated @RequestBody StringToIntegerDTO stringToIntegerDTO){
+		testService.testSaveAndEdit(stringToIntegerDTO);
+	}
+	
+	@ApiOperation(value = "findDTO")
+	@GetMapping(value = "findDTO")
+	public List<StringToIntegerDTO> findDTO(){
+		return testService.findDTO();
+	}
+	
+	@ResponseBody
+	@PostMapping(value = "/testDelete")
+	public void testDelete(@RequestBody List<Long> ids){
+		testService.testDelete(ids);
+	}
+	
+	@ResponseBody
+	@PostMapping(value = "/testListIn")
+	public Object testListIn(@Validated @RequestBody List<TestListInRequest> request){
+		List<StringToIntegerDTO> stringToIntegerDTOs = testService.testListIn(request);
+		return success(stringToIntegerDTOs);
+	}
+	@ResponseBody
+	@PostMapping(value = "/testEmptyList")
+	public Object testEmptyList(@Validated @RequestBody TestListEmptyRequest request){
+		return success();
+	}
 }
