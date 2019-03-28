@@ -189,4 +189,14 @@ public class TestService {
 		List<TestStringToInteger> in = stringToIntegerRepo.testListIn(strs);
 		return TestMapper2.INSTANCE.asStringToIntegerDTO(in);
 	}
+
+	public List<StringToIntegerDTO> testContain(String number) {
+		List<TestStringToInteger> contains =  stringToIntegerRepo.findByNumberContains(number);
+		return TestMapper2.INSTANCE.asStringToIntegerDTO(contains);
+	}
+
+	public List<StringToIntegerDTO> testNotContain(String number) {
+		List<TestStringToInteger> notContains =  stringToIntegerRepo.findByNumberNotContains(number);
+		return TestMapper2.INSTANCE.asStringToIntegerDTO(notContains);
+	}
 }

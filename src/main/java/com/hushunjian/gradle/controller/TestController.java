@@ -57,8 +57,9 @@ public class TestController extends BaseController{
 	
 	@ResponseBody
     @RequestMapping(value = "/validString1", method = RequestMethod.GET)
-    public String validString1(@RequestParam(value = "str", defaultValue = "") @Size(min = 1, max = 3) String vStr){
-        return vStr;
+    public String validString1(@RequestParam(value = "str", defaultValue = "") @Size(min = 1, max = 3, message = "名称长度必须小于3") String vStr,
+    		@RequestParam(value = "str1", defaultValue = "") @Size(min = 1, max = 4) String vStr1){
+        return vStr + vStr1;
     }
 	
 	@ResponseBody
@@ -131,5 +132,19 @@ public class TestController extends BaseController{
 	@PostMapping(value = "/testEmptyList")
 	public Object testEmptyList(@Validated @RequestBody TestListEmptyRequest request){
 		return success();
+	}
+	
+	@ResponseBody
+	@PostMapping(value = "/testContain")
+	public Object testContain(@RequestParam String number){
+		List<StringToIntegerDTO> stringToIntegerDTOs = testService.testContain(number);
+		return success(stringToIntegerDTOs);
+	}
+	
+	@ResponseBody
+	@PostMapping(value = "/testNotContain")
+	public Object testNotContain(@RequestParam String number){
+		List<StringToIntegerDTO> stringToIntegerDTOs = testService.testNotContain(number);
+		return success(stringToIntegerDTOs);
 	}
 }

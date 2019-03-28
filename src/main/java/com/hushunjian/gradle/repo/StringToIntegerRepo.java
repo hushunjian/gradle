@@ -25,4 +25,8 @@ public interface StringToIntegerRepo extends JpaRepository<TestStringToInteger, 
 	@Query("select t1 from TestStringToInteger t1 where CONCAT(t1.id,'|',t1.number) in :strs")
 	List<TestStringToInteger> testListIn(@Param("strs") List<String> strs);
 	
+	
+	List<TestStringToInteger> findByNumberContains(String number);
+	
+	List<TestStringToInteger> findByNumberNotContains(String number);
 }

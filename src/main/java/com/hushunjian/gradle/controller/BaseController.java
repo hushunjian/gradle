@@ -2,7 +2,12 @@ package com.hushunjian.gradle.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+
+import org.hibernate.validator.internal.engine.ConstraintViolationImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.validation.ObjectError;
@@ -30,6 +35,19 @@ public class BaseController {
                 break;
             }
         }
+        return errors;
+    }
+    
+    @ExceptionHandler(value = {ConstraintViolationException.class})
+    public Map<String, Object> handleValidationException(ConstraintViolationException e) {
+        Map<String, Object> errors = new HashMap<String, Object>();
+        Set<ConstraintViolation<?>> constraintViolations = e.getConstraintViolations();
+        StringBuilder message = new StringBuilder();
+        constraintViolations.forEach(con -> {
+        	ConstraintViolationImpl<?> ConstraintViolationImpl = (ConstraintViolationImpl<?>) con;
+        	message.append(String.format("[%s:%s],", ConstraintViolationImpl.getPropertyPath().toString().replaceAll("^.*\\.", ""), ConstraintViolationImpl.getMessage()));
+        });
+        System.out.println(message.substring(0, message.length() - 1));
         return errors;
     }
 

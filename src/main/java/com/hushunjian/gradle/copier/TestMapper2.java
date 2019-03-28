@@ -44,6 +44,10 @@ public interface TestMapper2 {
     @Mapping(target="num",ignore = true)
     OperatorDTO asOperator(User user);
     
+    @Mapping(target="operatorName",ignore = true)
+    @Mapping(target="num",ignore = true)
+    OperatorDTO asOperator(Operator user);
+    
     List<OperatorDTO> asOperators(List<User> users);
     
     List<OperatorDTO> asOperators(Page<User> users);
