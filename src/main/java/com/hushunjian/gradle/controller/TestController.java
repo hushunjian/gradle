@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -29,7 +30,7 @@ import io.swagger.annotations.ApiOperation;
 @Api(value = "TestController", description = "测试接口")
 @RequestMapping(value = "/test")
 @SuppressWarnings("all")
-@Validated
+@Validated 
 public class TestController extends BaseController{
 	@Autowired
 	private TestService testService;
@@ -146,5 +147,26 @@ public class TestController extends BaseController{
 	public Object testNotContain(@RequestParam String number){
 		List<StringToIntegerDTO> stringToIntegerDTOs = testService.testNotContain(number);
 		return success(stringToIntegerDTOs);
+	}
+	
+	@ResponseBody
+	@PostMapping(value = "/findAll")
+	public Object findAll(){
+		List<StringToIntegerDTO> stringToIntegerDTOs = testService.findAll();
+		return success(stringToIntegerDTOs);
+	}
+	
+	@ResponseBody
+	@ApiOperation(value = "测试get请求参数不可为空")
+	@GetMapping(value = "testGetNotBlank")
+	public Object testGetNotBlank(@RequestParam @NotBlank String str){
+		return success();
+	}
+	
+	@ResponseBody
+	@ApiOperation(value = "测试post请求,不使用@Validated")
+	@PostMapping(value = "/testPostNotValid")
+	public Object testPostNotValid(@RequestBody TestListEmptyRequest testListEmptyRequest){
+		return success();
 	}
 }
