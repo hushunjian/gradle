@@ -159,7 +159,7 @@ public class TestController extends BaseController{
 	@ResponseBody
 	@ApiOperation(value = "测试get请求参数不可为空")
 	@GetMapping(value = "testGetNotBlank")
-	public Object testGetNotBlank(@RequestParam @NotBlank String str){
+	public Object testGetNotBlank(@NotBlank @RequestParam String str){
 		return success();
 	}
 	
