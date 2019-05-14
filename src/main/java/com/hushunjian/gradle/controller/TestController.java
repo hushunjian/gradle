@@ -169,4 +169,13 @@ public class TestController extends BaseController{
 	public Object testPostNotValid(@RequestBody TestListEmptyRequest testListEmptyRequest){
 		return success();
 	}
+	
+	
+	@ResponseBody
+	@ApiOperation(value = "测试JPA的count")
+	@GetMapping(value="/testCount")
+	public Object testCount(@RequestParam String number){
+		Long count = testService.testCount(number);
+		return success(count>0);
+	}
 }

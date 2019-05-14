@@ -77,7 +77,7 @@ public class GetWeChatAccessTokenTask {
 		accessTokenRepo.save(accessToken);
 	}
 	
-	//@Scheduled(cron = "0 15 10 L * *")
+	//@Scheduled(cron = "0/5 * * * * *")
 	public void execute2(){
 		System.out.println("定时任务执行！");
 	}

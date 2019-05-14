@@ -204,4 +204,8 @@ public class TestService {
 		List<TestStringToInteger> notContains =  stringToIntegerRepo.findAll();
 		return TestMapper2.INSTANCE.asStringToIntegerDTO(notContains);
 	}
+
+	public Long testCount(String number) {
+		return stringToIntegerRepo.countByNumber(number);
+	}
 }
