@@ -1,6 +1,7 @@
 package com.hushunjian.gradle.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hushunjian.gradle.copier.TestMapper2;
+import com.hushunjian.gradle.dto.ParentDTO;
 import com.hushunjian.gradle.dto.StringToIntegerDTO;
 import com.hushunjian.gradle.entity.TestStringToInteger;
 import com.hushunjian.gradle.repo.StringToIntegerRepo;
@@ -207,5 +209,31 @@ public class TestService {
 
 	public Long testCount(String number) {
 		return stringToIntegerRepo.countByNumber(number);
+	}
+	
+	
+	public List<StringToIntegerDTO> findByIdIn(List<Long> ids){
+		List<TestStringToInteger> in = stringToIntegerRepo.findByIdIn(ids);
+		TestStringToInteger add = new TestStringToInteger();
+		add.setId(1000L);
+		in.add(add);
+		return TestMapper2.INSTANCE.asStringToIntegerDTO(in);
+	}
+	
+	public List<StringToIntegerDTO> findAll(List<Long> ids){
+		List<TestStringToInteger> findAll = stringToIntegerRepo.findAll(ids);
+		TestStringToInteger add = new TestStringToInteger();
+		add.setId(1000L);
+		findAll.add(add);
+		return TestMapper2.INSTANCE.asStringToIntegerDTO(findAll);
+	}
+	
+	public void find(Long... ids){
+	}
+	
+	private void a(List<? extends ParentDTO> list){
+		for(ParentDTO parentDTO : list){
+			
+		}
 	}
 }

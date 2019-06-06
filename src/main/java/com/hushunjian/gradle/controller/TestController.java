@@ -1,5 +1,6 @@
 package com.hushunjian.gradle.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.constraints.Size;
@@ -177,5 +178,47 @@ public class TestController extends BaseController{
 	public Object testCount(@RequestParam String number){
 		Long count = testService.testCount(number);
 		return success(count>0);
+	}
+	
+	@ResponseBody
+	@ApiOperation(value = "测试JPA的in-传入null")
+	@GetMapping(value="/test1")
+	public Object test1(){
+		List<StringToIntegerDTO> findByIdIn = testService.findByIdIn(null);
+		return success(findByIdIn);
+	}
+	
+	@ResponseBody
+	@ApiOperation(value = "测试JPA的in-传入空集合")
+	@GetMapping(value="/test2")
+	public Object test2(){
+		List<Long> ids = new ArrayList<>();
+		List<StringToIntegerDTO> findByIdIn = testService.findByIdIn(ids);
+		List<StringToIntegerDTO> findAll = testService.findAll(ids);
+		return success(findByIdIn.addAll(findAll));
+	}
+	
+	@ResponseBody
+	@ApiOperation(value = "测试JPA的in-传入有数据的集合-数据不存在")
+	@GetMapping(value="/test3")
+	public Object test3(){
+		List<Long> ids = new ArrayList<>();
+		ids.add(11L);
+		ids.add(21L);
+		List<StringToIntegerDTO> findByIdIn = testService.findByIdIn(ids);
+		List<StringToIntegerDTO> findAll = testService.findAll(ids);
+		return success(findByIdIn.addAll(findAll));
+	}
+	
+	@ResponseBody
+	@ApiOperation(value = "测试JPA的in-传入有数据的集合-数据存在")
+	@GetMapping(value="/test4")
+	public Object test4(){
+		List<Long> ids = new ArrayList<>();
+		ids.add(1L);
+		ids.add(2L);
+		List<StringToIntegerDTO> findByIdIn = testService.findByIdIn(ids);
+		List<StringToIntegerDTO> findAll = testService.findAll(ids);
+		return success(findByIdIn.addAll(findAll));
 	}
 }

@@ -19,4 +19,6 @@ public class DocumentDTO {
 	
 	@ApiModelProperty(value = "类型")
 	private DocumentTypeEnum documentType;
+	
+	private Boolean test;
 }
