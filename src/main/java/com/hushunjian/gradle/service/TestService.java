@@ -236,4 +236,14 @@ public class TestService {
 			
 		}
 	}
+
+	public List<StringToIntegerDTO> findByJPA(String number) {
+		List<TestStringToInteger> findByNumberStartingWith = stringToIntegerRepo.findByNumberStartingWith(number);
+		return TestMapper2.INSTANCE.asStringToIntegerDTO(findByNumberStartingWith);
+	}
+
+	public List<StringToIntegerDTO> findByQuery(String number) {
+		List<TestStringToInteger> findByNumberQuery = stringToIntegerRepo.findByNumberQuery(number);
+		return TestMapper2.INSTANCE.asStringToIntegerDTO(findByNumberQuery);
+	}
 }

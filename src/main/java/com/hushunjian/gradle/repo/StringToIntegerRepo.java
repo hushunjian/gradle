@@ -31,4 +31,9 @@ public interface StringToIntegerRepo extends JpaRepository<TestStringToInteger, 
 	List<TestStringToInteger> findByNumberNotContains(String number);
 	
 	Long countByNumber(String number);
+	
+	List<TestStringToInteger> findByNumberStartingWith(String number);
+	
+	@Query("select t1 from TestStringToInteger t1 where t1.number like :number%")
+	List<TestStringToInteger> findByNumberQuery(@Param("number") String number);
 }

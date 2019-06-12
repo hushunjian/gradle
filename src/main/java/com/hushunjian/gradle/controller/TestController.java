@@ -221,4 +221,18 @@ public class TestController extends BaseController{
 		List<StringToIntegerDTO> findAll = testService.findAll(ids);
 		return success(findByIdIn.addAll(findAll));
 	}
+	
+	@ResponseBody
+	@GetMapping(value = "/test5JPA")
+	public Object test5(@RequestParam String number){
+		List<StringToIntegerDTO> dto = testService.findByJPA(number);
+		return success(dto);
+	}
+	
+	@ResponseBody
+	@GetMapping(value = "/test6Query")
+	public Object test6(@RequestParam String number){
+		List<StringToIntegerDTO> dto = testService.findByQuery(number);
+		return success(dto);
+	}
 }
