@@ -17,8 +17,8 @@ import com.hushunjian.gradle.repo.TaskCornRepo;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Component
-@EnableScheduling
+//@Component
+//@EnableScheduling
 public class TaskTest implements SchedulingConfigurer {
 	
 	@Autowired
@@ -36,13 +36,13 @@ public class TaskTest implements SchedulingConfigurer {
 		taskRegistrar.addTriggerTask(new Runnable() {
 			@Override
 			public void run() {
-				log.info("task_task_task");
+				log.info("执行定时任务");
 			}
 		}, new Trigger() {
 			@Override
 			public Date nextExecutionTime(TriggerContext triggerContext) {
 				String corn = getTaskCorn();
-				log.info(corn);
+				log.info("获取定时任务执行时间");
 				CronTrigger trigger = new CronTrigger(corn);
                 Date nextExec = trigger.nextExecutionTime(triggerContext);
                 return nextExec;
