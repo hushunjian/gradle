@@ -71,5 +71,4 @@ public interface TestMapper2 {
     
     
     List<OperatorDTO> asOperator(List<User> beans, @Context TestContext testContext);
-    
 }

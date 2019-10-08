@@ -1,7 +1,12 @@
 package com.hushunjian.gradle.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -9,13 +14,15 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hushunjian.gradle.copier.TestMapper2;
-import com.hushunjian.gradle.dto.ParentDTO;
 import com.hushunjian.gradle.dto.StringToIntegerDTO;
+import com.hushunjian.gradle.entity.DateTestEntity;
 import com.hushunjian.gradle.entity.TestStringToInteger;
+import com.hushunjian.gradle.repo.DateTestRepo;
 import com.hushunjian.gradle.repo.StringToIntegerRepo;
 import com.hushunjian.gradle.request.TestListInRequest;
 
@@ -26,8 +33,11 @@ public class TestService {
 	@Autowired
 	private StringToIntegerRepo stringToIntegerRepo;
 	
+	@Autowired
+	private DateTestRepo dateTestRepo;
+	
 	@PersistenceContext
-    EntityManager entityManager;
+	private EntityManager entityManager;
 
 	public void tesetReturn(Integer num) {
 		
@@ -230,12 +240,6 @@ public class TestService {
 	
 	public void find(Long... ids){
 	}
-	
-	private void a(List<? extends ParentDTO> list){
-		for(ParentDTO parentDTO : list){
-			
-		}
-	}
 
 	public List<StringToIntegerDTO> findByJPA(String number) {
 		List<TestStringToInteger> findByNumberStartingWith = stringToIntegerRepo.findByNumberStartingWith(number);
@@ -246,4 +250,66 @@ public class TestService {
 		List<TestStringToInteger> findByNumberQuery = stringToIntegerRepo.findByNumberQuery(number);
 		return TestMapper2.INSTANCE.asStringToIntegerDTO(findByNumberQuery);
 	}
+
+	public void test7() {
+		for(int i = 0; i < 4; i++){
+			stringToIntegerRepo.findAll();
+		}
+	}
+
+	public DateTestEntity testDate() {
+		Date now = DateUtils.round(new Date(), Calendar.SECOND);
+		String sendTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(now);
+		DateTestEntity date = new DateTestEntity();
+		date.setSendTime(now);
+		date.setTimeStr(sendTime);
+		try {
+			date.setSendTimeA(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(sendTime));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		ZonedDateTime sendTimeB = ZonedDateTime.now();
+		date.setSendTimeB(sendTimeB);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.systemDefault());
+		date.setSendTimeBStr(sendTimeB.format(formatter));
+		dateTestRepo.save(date);
+		Long[] ids = new Long[]{1L, 2L, 3L, 5L};
+		List<DateTestEntity> findByIdIn = dateTestRepo.findByIdIn(ids);
+		findByIdIn.size();
+		return date;
+	}
+
+	public DateTestEntity saveAndFlush() {
+		DateTestEntity date = new DateTestEntity();
+		date.setSendTime(new Date());
+		dateTestRepo.save(date);
+		entityManager.refresh(date);
+		//List<DateTestEntity> dates = new ArrayList<>();
+		//entityManager.refresh(dates);
+		return date;
+	}
+
+	public DateTestEntity testSaveNullPro(Long id) {
+		DateTestEntity date = dateTestRepo.findOne(id);
+		date.setTimeStr("aaaa");
+		return date;
+	}
+
+	public List<StringToIntegerDTO> testInEmpty() {
+		List<String> numbers = new ArrayList<>();
+		String number0 = "0";
+		List<TestStringToInteger> findByNumberInAndNumber0 = stringToIntegerRepo.findByNumberInAndNumber0(numbers, number0);
+		return TestMapper2.INSTANCE.asStringToIntegerDTO(findByNumberInAndNumber0);
+	}
+
+	public void checkHasChildrenParentId() {
+		List<String> parentIds = new ArrayList<>();
+		parentIds.add("444499");
+		List<String> checkHasChildrenParentId = stringToIntegerRepo.checkHasChildrenParentId(parentIds);
+		System.out.println(checkHasChildrenParentId.size());
+		System.out.println(checkHasChildrenParentId);
+	}
+	
+	
 }

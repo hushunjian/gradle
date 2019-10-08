@@ -7,6 +7,7 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hushunjian.gradle.dto.StringToIntegerDTO;
+import com.hushunjian.gradle.entity.DateTestEntity;
 import com.hushunjian.gradle.enumeration.YesOrNoEnum;
 import com.hushunjian.gradle.request.TestListEmptyRequest;
 import com.hushunjian.gradle.request.TestListInRequest;
@@ -35,6 +37,8 @@ import io.swagger.annotations.ApiOperation;
 public class TestController extends BaseController{
 	@Autowired
 	private TestService testService;
+	@Autowired
+	private Environment environment;
 	
 	@ApiOperation(value = "测试return", notes = "测试return",produces = MediaType.ALL_VALUE)
 	@RequestMapping(value="/tesetReturn",method=RequestMethod.GET)
@@ -234,5 +238,65 @@ public class TestController extends BaseController{
 	public Object test6(@RequestParam String number){
 		List<StringToIntegerDTO> dto = testService.findByQuery(number);
 		return success(dto);
+	}
+	
+	@ResponseBody
+	@GetMapping(value = "/test7")
+	public Object test7(){
+		testService.test7();
+		return success();
+	}
+	
+	@ResponseBody
+	@GetMapping(value = "/testDate")
+	public Object testDate(){
+		DateTestEntity date = testService.testDate();
+		return success(date);
+	}
+	
+	@ResponseBody
+	@GetMapping(value = "/saveAndFlush")
+	public Object saveAndFlush(){
+		DateTestEntity date = testService.saveAndFlush();
+		return success(date);
+	}
+	
+	@ResponseBody
+	@GetMapping(value = "/testSaveNullPro")
+	public Object testSaveNullPro(@RequestParam Long id){
+		DateTestEntity date = testService.testSaveNullPro(id);
+		return success(date);
+	}
+	
+	@ResponseBody
+	@GetMapping(value = "/testInEmpty")
+	public Object testInEmpty(){
+		List<StringToIntegerDTO> dto = testService.testInEmpty();
+		return success(dto);
+	}
+	
+	@ResponseBody
+	@GetMapping(value = "/checkHasChildrenParentId")
+	public Object checkHasChildrenParentId(){
+		testService.checkHasChildrenParentId();
+		return success();
+	}
+	@ResponseBody
+	@GetMapping(value = "/testEnvironmentOne")
+	public Object testEnvironmentOne(){
+		long start = System.currentTimeMillis();
+		String javaHome = environment.getProperty("JAVA_HOME");
+		return success(System.currentTimeMillis() - start);
+	}
+	
+	@ResponseBody
+	@GetMapping(value = "/testEnvironmentMany")
+	public Object testEnvironmentMany(){
+		long start = System.currentTimeMillis();
+		String javaHome;
+		for(int i = 0 ; i <= 10000; i++){
+			javaHome = environment.getProperty("JAVA_HOME");
+		}
+		return success(System.currentTimeMillis() - start);
 	}
 }

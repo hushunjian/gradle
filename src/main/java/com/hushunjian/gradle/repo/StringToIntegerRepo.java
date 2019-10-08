@@ -36,4 +36,9 @@ public interface StringToIntegerRepo extends JpaRepository<TestStringToInteger, 
 	
 	@Query("select t1 from TestStringToInteger t1 where t1.number like :number%")
 	List<TestStringToInteger> findByNumberQuery(@Param("number") String number);
+	
+	List<TestStringToInteger> findByNumberInAndNumber0(List<String> numbers, String number0);
+	
+	@Query("select distinct t1.number from TestStringToInteger t1 where t1.number in :parentIds")
+	List<String> checkHasChildrenParentId(@Param("parentIds") List<String> parentIds);
 }

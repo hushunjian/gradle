@@ -45,6 +45,7 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-jpa'){
     	exclude(group: 'org.hibernate', module: 'hibernate-entitymanager')
 	}
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.7'
 	compile group: 'com.alibaba', name: 'fastjson', version: '1.2.47'
 	compile('org.hibernate:hibernate-core:5.2.9.Final')
 	runtime('mysql:mysql-connector-java') 

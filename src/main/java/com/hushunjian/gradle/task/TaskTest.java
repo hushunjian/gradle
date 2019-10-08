@@ -17,8 +17,8 @@ import com.hushunjian.gradle.repo.TaskCornRepo;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-//@Component
-//@EnableScheduling
+@Component
+@EnableScheduling
 public class TaskTest implements SchedulingConfigurer {
 	
 	@Autowired
