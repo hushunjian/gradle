@@ -22,9 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hushunjian.gradle.dto.StringToIntegerDTO;
 import com.hushunjian.gradle.entity.DateTestEntity;
 import com.hushunjian.gradle.enumeration.YesOrNoEnum;
+import com.hushunjian.gradle.request.BooleanReq;
 import com.hushunjian.gradle.request.TestListEmptyRequest;
 import com.hushunjian.gradle.request.TestListInRequest;
 import com.hushunjian.gradle.service.TestService;
+import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -299,4 +301,26 @@ public class TestController extends BaseController{
 		}
 		return success(System.currentTimeMillis() - start);
 	}
+	
+	@ResponseBody
+	@PostMapping(value = "/testBooleanNotBlank")
+	public Object testBooleanNotBlank(@Validated @RequestBody BooleanReq req) {
+		return success();
+	}
+	
+	@ResponseBody
+	@GetMapping(value = "/testUpdate")
+	public Object testUpdate() {
+		testService.testUpdat();
+		return success();
+	}
+	
+	@ResponseBody
+	@GetMapping(value = "/testVersion")
+	public Object testVersion() {
+		testService.testVersion();
+		return success();
+	}
+	
+	
 }

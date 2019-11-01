@@ -18,10 +18,15 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.collect.Lists;
+import com.hushunjian.gradle.copier.AuditProcessMapper;
 import com.hushunjian.gradle.copier.TestMapper2;
+import com.hushunjian.gradle.dto.AuditProcessDTO;
 import com.hushunjian.gradle.dto.StringToIntegerDTO;
+import com.hushunjian.gradle.entity.AuditProcess;
 import com.hushunjian.gradle.entity.DateTestEntity;
 import com.hushunjian.gradle.entity.TestStringToInteger;
+import com.hushunjian.gradle.repo.AuditProcessRepo;
 import com.hushunjian.gradle.repo.DateTestRepo;
 import com.hushunjian.gradle.repo.StringToIntegerRepo;
 import com.hushunjian.gradle.request.TestListInRequest;
@@ -32,6 +37,9 @@ public class TestService {
 	
 	@Autowired
 	private StringToIntegerRepo stringToIntegerRepo;
+	
+	@Autowired
+	private AuditProcessRepo auditProcessRepo;
 	
 	@Autowired
 	private DateTestRepo dateTestRepo;
@@ -310,6 +318,50 @@ public class TestService {
 		System.out.println(checkHasChildrenParentId.size());
 		System.out.println(checkHasChildrenParentId);
 	}
+
+	public void testUpdat() {
+		TestStringToInteger findOne = stringToIntegerRepo.findOne(2L);
+		findOne.setId(20L);
+	}
+
+	public void testVersion() {
+		// TODO Auto-generated method stub
+		AuditProcess findOne = auditProcessRepo.findOne("4028b8816e22b9d4016e22b9fd570000");
+		for(int i = 0; i < 2; i++) {
+			findOne.setOrderNum(i);
+		}
+		for(int i = 0; i < 3; i++) {
+			findOne.setName(i + "");
+			auditProcessRepo.save(findOne);
+		}
+		test(findOne);
+	}
+	
+	private void test(AuditProcess findOne) {
+		AuditProcessDTO dto = AuditProcessMapper.AUDIT_PROCESS.toAuditProcessDTO(findOne);
+		for(int i = 0; i < 4; i++) {
+			dto.setProjectId(i + "");
+		}
+		auditProcessRepo.save(AuditProcessMapper.AUDIT_PROCESS.toAuditProcess(dto));
+		test(dto);
+	}
+	
+	private void test(AuditProcessDTO dto) {
+		List<AuditProcess> list = Lists.newArrayList();
+		List<AuditProcessDTO> list1 = Lists.newArrayList();
+		for(int i = 0; i < 5; i++) {
+			dto.setProjectId(i + "");
+			list1.add(dto);
+			list.add(AuditProcessMapper.AUDIT_PROCESS.toAuditProcess(dto));
+		}
+		auditProcessRepo.deleteA("4028b8816e22b9d4016e22b9fd570000");
+		auditProcessRepo.save(list);
+		test(list1);
+	}
 	
 	
+	private void test(List<AuditProcessDTO> dto) {
+		List<AuditProcess> auditProcess = AuditProcessMapper.AUDIT_PROCESS.toAuditProcess(dto);
+		auditProcessRepo.save(auditProcess);
+	}
 }

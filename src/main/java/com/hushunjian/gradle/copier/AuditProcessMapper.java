@@ -12,6 +12,12 @@ import com.hushunjian.gradle.entity.AuditProcess;
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface AuditProcessMapper {
     AuditProcessMapper AUDIT_PROCESS = Mappers.getMapper(AuditProcessMapper.class);
+    
+    AuditProcessDTO toAuditProcessDTO(AuditProcess bean);
 
     List<AuditProcessDTO> toAuditProcessDTO(List<AuditProcess> beans);
+    
+    AuditProcess toAuditProcess(AuditProcessDTO dto);
+    
+    List<AuditProcess> toAuditProcess(List<AuditProcessDTO> beans);
 }
